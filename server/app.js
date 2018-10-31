@@ -5,7 +5,8 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express"),
   path = require("path"),
   bodyParser = require("body-parser"),
-  cookieParser = require("cookie-parser");
+  morgan = require("morgan");
+cookieParser = require("cookie-parser");
 
 const app = express();
 
@@ -18,6 +19,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(morgan("dev"));
 
 //Express Session
 // app.use(
@@ -46,8 +48,10 @@ app.use(cookieParser());
 // Routes
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
+const stockRouter = require("./routes/stocks");
 app.use("/users", userRouter);
 app.use("/", indexRouter);
+app.use("/stocks", stockRouter);
 
 // // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
