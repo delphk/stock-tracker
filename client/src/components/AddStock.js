@@ -6,8 +6,7 @@ class AddStock extends React.Component {
     name: "",
     symbol: "",
     targetlow: undefined,
-    targethigh: undefined,
-    userid: ""
+    targethigh: undefined
   };
 
   handleChange = e => {
@@ -26,6 +25,7 @@ class AddStock extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <Container>
         <h2>Add Stocks</h2>
@@ -41,9 +41,7 @@ class AddStock extends React.Component {
             />
           </FormGroup>
           <FormGroup>
-            <Label for="symbol" name="symbol" id="symbol">
-              Symbol
-            </Label>
+            <Label for="symbol">Symbol</Label>
             <Input
               type="text"
               name="symbol"
@@ -53,9 +51,7 @@ class AddStock extends React.Component {
             />
           </FormGroup>
           <FormGroup>
-            <Label for="targetlow" name="targetlow" id="targetlow">
-              Target Low:
-            </Label>
+            <Label for="targetlow">Target Low:</Label>
             <Input
               type="number"
               name="targetlow"
@@ -69,15 +65,6 @@ class AddStock extends React.Component {
               type="number"
               name="targethigh"
               value={this.state.targethigh}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="userid">User ID</Label>
-            <Input
-              type="text"
-              name="userid"
-              value={this.state.userid}
               onChange={this.handleChange}
             />
           </FormGroup>

@@ -41,6 +41,9 @@ class AppNavBar extends Component {
                 <NavItem>
                   <NavLink href="/dashboard">Dashboard</NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink href="/logout">Logout</NavLink>
+                </NavItem>
               </Nav>
             </Collapse>
           </Container>

@@ -11,15 +11,17 @@ class Login extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    fetch("/users/login", {
+    const request = await fetch("/users/login", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(this.state)
-    })
-      .then(response => response.json())
-      .then(res => console.log(res));
+    });
+    const response = await request.json();
+    if (response) {
+      this.props.toggleLogin();
+    }
   };
 
   render() {

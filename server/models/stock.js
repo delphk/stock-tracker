@@ -4,8 +4,7 @@ const { Schema } = mongoose;
 const stockSchema = new Schema({
   symbol: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   name: {
     type: String

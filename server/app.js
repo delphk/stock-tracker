@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").load();
 }
-
+const { passport } = require("./passport");
 const express = require("express"),
   path = require("path"),
   bodyParser = require("body-parser"),
@@ -20,15 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
-
-//Express Session
-// app.use(
-//   session({
-//     secret: "secret",
-//     saveUninitialized: true,
-//     resave: true
-//   })
-// );
+app.use(passport.initialize());
 
 //Connect Flash
 // app.use(flash());
