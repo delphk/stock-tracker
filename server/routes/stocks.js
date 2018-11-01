@@ -21,7 +21,6 @@ router.post(
   async (req, res) => {
     // const { name, symbol, targetlow, targethigh } = req.body;
     const newStock = new Stock(req.body);
-    console.log(req.user_id);
     newStock.userid = req.user._id;
     await newStock.save();
     res.json({ status: "success" });
@@ -36,8 +35,10 @@ router.delete("/:id", async (req, res) => {
 
 // Handle edit stock
 router.put("/:id", async (req, res) => {
-  const stock = await Stock.findByIdAndUpdate(req.params.id, req.body);
-  res.json({ status: "success" });
+  const stock = await Stock.findByIdAndUpdate(req.params.id, req.body, {
+    new: true
+  });
+  res.json({ stock });
 });
 
 // router.use((err, req, res, next) => {

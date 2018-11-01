@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Button, Form, FormGroup, Label, Input } from "reactstrap";
-import { Redirect } from "react-router-dom";
 
 class AddStock extends React.Component {
   state = {
@@ -58,38 +57,43 @@ class AddStock extends React.Component {
                 onChange={this.handleChange}
                 placeholder="Enter symbol"
               />
-              <Button onClick={() => this.getSymbol(this.state.symbol)}>
-                Get
+              <Button
+                className="mt-3"
+                onClick={() => this.getSymbol(this.state.symbol)}
+              >
+                Search
               </Button>
             </FormGroup>
           )}
           {<p>{this.state.errorMessage}</p>}
-          {this.state.isSymbolValid && <p>Symbol: {this.state.symbol}</p>}
-          {this.state.isSymbolValid && <p>Name: {this.state.name}</p>}
-          {this.state.isSymbolValid && (
-            <FormGroup>
-              <Label for="targetlow">Target Low:</Label>
-              <Input
-                type="number"
-                name="targetlow"
-                value={this.state.targetlow}
-                onChange={this.handleChange}
-              />
-            </FormGroup>
-          )}
 
           {this.state.isSymbolValid && (
-            <FormGroup>
-              <Label for="targethigh">Target High</Label>
-              <Input
-                type="number"
-                name="targethigh"
-                value={this.state.targethigh}
-                onChange={this.handleChange}
-              />
-            </FormGroup>
+            <div>
+              <p>Symbol: {this.state.symbol}</p>
+              <p>Name: {this.state.name}</p>
+
+              <FormGroup>
+                <Label for="targetlow">Target Low:</Label>
+                <Input
+                  type="number"
+                  name="targetlow"
+                  value={this.state.targetlow}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <Label for="targethigh">Target High</Label>
+                <Input
+                  type="number"
+                  name="targethigh"
+                  value={this.state.targethigh}
+                  onChange={this.handleChange}
+                />
+              </FormGroup>
+              <Button>Submit</Button>
+            </div>
           )}
-          {this.state.isSymbolValid && <Button>Submit</Button>}
         </Form>
       </Container>
     );

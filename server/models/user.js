@@ -10,8 +10,7 @@ const userSchema = new Schema({
     type: String,
     lowercase: true,
     unique: true,
-    require: true,
-    index: true
+    require: true
   },
   salt: String,
   hash: String,
