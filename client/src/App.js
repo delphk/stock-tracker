@@ -6,6 +6,8 @@ import Register from "./components/Register";
 import AddStock from "./components/AddStock";
 import Dashboard from "./components/Dashboard";
 import Logout from "./components/Logout";
+import NotFound from "./components/NotFound";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,14 +21,14 @@ class App extends Component {
   state = { isLoggedIn: false };
 
   toggleLogin = () => {
-    this.setState({ isLoggedIn: !this.state.isLoggedIn });
+    this.setState({ isLoggedIn: true });
   };
 
   render() {
     console.log(this.state.isLoggedIn);
     return (
       <React.Fragment>
-        <AppNavBar />
+        <AppNavBar isLoggedIn={this.state.isLoggedIn} />
         <Router>
           <Switch>
             <Route
@@ -43,6 +45,7 @@ class App extends Component {
             <Route path="/addstock" component={AddStock} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/logout" component={Logout} />
+            <Route component={NotFound} />
           </Switch>
         </Router>
       </React.Fragment>

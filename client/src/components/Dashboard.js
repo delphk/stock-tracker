@@ -8,31 +8,29 @@ class Dashboard extends React.Component {
 
   async componentDidMount() {
     const request = await fetch("/stocks", {
-      method: "get",
-      headers: { "Content-Type": "application/json" }
+      method: "get"
     });
     const response = await request.json();
     this.setState({ stocks: response });
     if (this.state.stocks.length > 0) {
-      this.getStocks();
+      this.getStockPrices();
     }
   }
 
-  getStocks = async () => {
+  getStockPrices = async () => {
     const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
     const symbols = arrayOfSymbols.join(",");
     const url = `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols}&types=quote`;
     const request = await fetch(url);
     const response = await request.json();
     const arrayOfStockPrices = [];
-    let stocks = [...this.state.stocks];
     for (let i = 0; i < arrayOfSymbols.length; i++) {
       const prices = response[arrayOfSymbols[i]]["quote"]["close"];
       arrayOfStockPrices.push(prices);
     }
+    let stocks = [...this.state.stocks];
     stocks.map((stock, index) => (stock.price = arrayOfStockPrices[index]));
     this.setState({ stocks });
-    console.log(this.state);
   };
 
   handleDelete = async (id, index) => {

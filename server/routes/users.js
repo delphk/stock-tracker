@@ -42,13 +42,9 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Handle user logout
-router.post(
-  "/logout",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    res.clearCookie("jwt");
-    res.json({ status: "done" });
-  }
-);
+router.post("/logout", async (req, res) => {
+  res.clearCookie("jwt");
+  res.json({ status: "done" });
+});
 
 module.exports = router;
