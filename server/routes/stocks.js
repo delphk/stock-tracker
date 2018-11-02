@@ -8,9 +8,13 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const userid = req.user._id;
-    const stocks = await Stock.find({ userid });
-    res.json(stocks);
+    try {
+      const userid = req.user._id;
+      const stocks = await Stock.find({ userid });
+      res.json(stocks);
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
 
@@ -19,11 +23,14 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    // const { name, symbol, targetlow, targethigh } = req.body;
-    const newStock = new Stock(req.body);
-    newStock.userid = req.user._id;
-    await newStock.save();
-    res.json({ status: "success" });
+    try {
+      const newStock = new Stock(req.body);
+      newStock.userid = req.user._id;
+      await newStock.save();
+      res.json({ status: "success" });
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
 

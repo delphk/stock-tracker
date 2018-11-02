@@ -24,13 +24,17 @@ class Dashboard extends React.Component {
   };
 
   async componentDidMount() {
-    const request = await fetch("/stocks", {
-      method: "get"
-    });
-    const response = await request.json();
-    this.setState({ stocks: response });
-    if (this.state.stocks.length > 0) {
-      this.getStockPrices();
+    try {
+      const request = await fetch("/stocks", {
+        method: "get"
+      });
+      const response = await request.json();
+      this.setState({ stocks: response });
+      if (this.state.stocks.length > 0) {
+        this.getStockPrices();
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -99,43 +103,55 @@ class Dashboard extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.stocks.map((stock, index) => (
-              <tr key={index}>
-                <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
-                  <ModalHeader toggle={this.toggleModal}>
-                    Edit Target Price
-                  </ModalHeader>
-                  <form onSubmit={e => this.handleEdit(stock._id, index, e)}>
-                    <ModalBody>
-                      <Label>Target Low:</Label>{" "}
-                      <Input name="newtargetlow" type="number" />
-                      <Label>Target High:</Label>{" "}
-                      <Input name="newtargethigh" type="number" />
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="primary">Do Something</Button>
-                    </ModalFooter>
-                  </form>
-                </Modal>
-                <th scope="row">{index + 1}</th>
-                <td>{stock.name}</td>
-                <td>{stock.symbol}</td>
-                <td>${stock.price}</td>
-                <td>
-                  {stock.targetlow ? "$" + stock.targetlow.toFixed(2) : "-"}
-                </td>
-                <td>
-                  {stock.targethigh ? "$" + stock.targethigh.toFixed(2) : "-"}
-                </td>
-                <td>
-                  <i className="fa fa-edit fa-lg" onClick={this.toggleModal} />
-                  <i
-                    className="fa fa-trash fa-lg"
-                    onClick={() => this.handleDelete(stock._id, index)}
-                  />
-                </td>
-              </tr>
-            ))}
+            {this.state.stocks.map((stock, index) => {
+              let myStock = stock;
+              let myIndex = index;
+              let handler = this.handleEdit.bind(stock._id, index);
+              return (
+                <tr key={index}>
+                  <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+                    <ModalHeader toggle={this.toggleModal}>
+                      Edit Target Price
+                    </ModalHeader>
+                    <form onSubmit={e => handler(e)}>
+                      <ModalBody>
+                        <Label>Target Low:</Label>{" "}
+                        <Input name="newtargetlow" type="number" />
+                        <Label>Target High:</Label>{" "}
+                        <Input name="newtargethigh" type="number" />
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="primary">Do Something</Button>
+                      </ModalFooter>
+                    </form>
+                  </Modal>
+                  <th scope="row">{myIndex + 1}</th>
+                  <td>{myStock.name}</td>
+                  <td>{myStock.symbol}</td>
+                  <td>${myStock.price}</td>
+                  <td>
+                    {myStock.targetlow
+                      ? "$" + myStock.targetlow.toFixed(2)
+                      : "-"}
+                  </td>
+                  <td>
+                    {myStock.targethigh
+                      ? "$" + myStock.targethigh.toFixed(2)
+                      : "-"}
+                  </td>
+                  <td>
+                    <i
+                      className="fa fa-edit fa-lg"
+                      onClick={this.toggleModal}
+                    />
+                    <i
+                      className="fa fa-trash fa-lg"
+                      onClick={() => this.handleDelete(myStock._id, myIndex)}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </Table>
       </Container>

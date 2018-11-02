@@ -8,7 +8,8 @@ class Logout extends Component {
     });
     const response = await request.json();
     console.log(response);
-    this.props.history.push("/login");
+    this.props.toggleLogin();
+    // this.props.history.push("/login");
   }
 
   render() {

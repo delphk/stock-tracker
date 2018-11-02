@@ -38,7 +38,7 @@ class AddStock extends React.Component {
       this.setState({ name, symbol, isSymbolValid: true, errorMessage: "" });
       console.log(this.state);
     } catch {
-      this.setState({ errorMessage: "No such stock exists" });
+      this.setState({ errorMessage: "No such stock exists :(" });
     }
   };
 
@@ -65,7 +65,7 @@ class AddStock extends React.Component {
               </Button>
             </FormGroup>
           )}
-          {<p>{this.state.errorMessage}</p>}
+          {<p style={{ color: "#e03428" }}>{this.state.errorMessage}</p>}
 
           {this.state.isSymbolValid && (
             <div>

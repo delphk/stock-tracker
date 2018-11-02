@@ -7,11 +7,15 @@ const User = require("../models/user");
 
 // Handle user registration
 router.post("/register", async (req, res) => {
-  const { name, username, email, password } = req.body;
-  const newUser = new User({ name, username, email });
-  newUser.setPassword(password);
-  await newUser.save();
-  res.json({ user: { username: newUser.username, email: newUser.email } });
+  try {
+    const { name, username, email, password } = req.body;
+    const newUser = new User({ name, username, email });
+    newUser.setPassword(password);
+    await newUser.save();
+    res.json({ user: { username: newUser.username, email: newUser.email } });
+  } catch (err) {
+    res.json({ message: err.message });
+  }
 });
 
 // Handle user login
@@ -20,7 +24,7 @@ router.post("/login", async (req, res) => {
   if (!user || !user.verifyPassword(req.body.password)) {
     return res
       .status(403)
-      .json({ error: { message: "username and/or password is invalid" } });
+      .json({ error: { message: "Username and/or password is invalid" } });
   }
   const token = user.generateToken();
 

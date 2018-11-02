@@ -21,32 +21,51 @@ class App extends Component {
   state = { isLoggedIn: false };
 
   toggleLogin = () => {
-    this.setState({ isLoggedIn: true });
+    this.setState({ isLoggedIn: !this.state.isLoggedIn });
   };
 
   render() {
     console.log(this.state.isLoggedIn);
     return (
       <React.Fragment>
-        <AppNavBar isLoggedIn={this.state.isLoggedIn} />
         <Router>
-          <Switch>
-            <Route
-              path="/login"
-              render={props => {
-                return this.state.isLoggedIn ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <Login toggleLogin={this.toggleLogin} />
-                );
-              }}
-            />
-            <Route path="/register" component={Register} />
-            <Route path="/addstock" component={AddStock} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/logout" component={Logout} />
-            <Route component={NotFound} />
-          </Switch>
+          <div>
+            <AppNavBar isLoggedIn={this.state.isLoggedIn} />
+
+            <Switch>
+              <Route
+                path="/login"
+                render={props => {
+                  return this.state.isLoggedIn ? (
+                    <Redirect to="/dashboard" />
+                  ) : (
+                    <Login toggleLogin={this.toggleLogin} />
+                  );
+                }}
+              />
+              <Route
+                exact
+                path="/"
+                render={() => {
+                  return this.state.isLoggedIn ? (
+                    <Redirect to="/dashboard" />
+                  ) : (
+                    <Redirect to="/login" />
+                  );
+                }}
+              />
+              <Route path="/register" component={Register} />
+              <Route path="/addstock" component={AddStock} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route
+                path="/logout"
+                render={() => {
+                  return <Logout toggleLogin={this.toggleLogin} />;
+                }}
+              />
+              <Route component={NotFound} />
+            </Switch>
+          </div>
         </Router>
       </React.Fragment>
     );

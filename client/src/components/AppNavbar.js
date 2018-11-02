@@ -6,9 +6,9 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   Container
 } from "reactstrap";
+import { Link } from "react-router-dom";
 
 class AppNavBar extends Component {
   state = {
@@ -29,21 +29,29 @@ class AppNavBar extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                <NavItem>
-                  <NavLink href="/login">Login</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/register">Register</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/addstock">Add stocks</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/dashboard">Dashboard</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink href="/logout">Logout</NavLink>
-                </NavItem>
+                {!this.props.isLoggedIn && (
+                  <React.Fragment>
+                    <NavItem>
+                      <Link to="/login">Login</Link>
+                    </NavItem>
+                    <NavItem>
+                      <Link to="/register">Register</Link>
+                    </NavItem>
+                  </React.Fragment>
+                )}
+                {this.props.isLoggedIn && (
+                  <React.Fragment>
+                    <NavItem>
+                      <Link to="/addstock">Add stocks</Link>
+                    </NavItem>
+                    <NavItem>
+                      <Link to="/dashboard">Dashboard</Link>
+                    </NavItem>
+                    <NavItem>
+                      <Link to="/logout">Logout</Link>
+                    </NavItem>
+                  </React.Fragment>
+                )}
               </Nav>
             </Collapse>
           </Container>

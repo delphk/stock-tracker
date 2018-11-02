@@ -1,12 +1,12 @@
 import React from "react";
 import {
+  Alert,
   Container,
   Button,
   Form,
   FormGroup,
   Label,
-  Input,
-  FormFeedback
+  Input
 } from "reactstrap";
 
 class Register extends React.Component {
@@ -15,27 +15,66 @@ class Register extends React.Component {
     username: "",
     email: "",
     password: "",
-    password2: ""
+    password2: "",
+    errorMessage: "",
+    successMessage: ""
   };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit = e => {
+  ValidateEmail(mail) {
+    if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
+    return false;
+  }
+
+  handleSubmit = async e => {
     e.preventDefault();
-    fetch("/users/register", {
+    const { name, username, email, password, password2 } = this.state;
+    if (password !== password2) {
+      return this.setState({ errorMessage: "Passwords do not match" });
+    } else if (!name || !email || !username || !password) {
+      return this.setState({ errorMessage: "Please fill up all fields" });
+    } else if (!this.ValidateEmail(email)) {
+      return this.setState({ errorMessage: "Please enter a valid email" });
+    }
+    const request = await fetch("/users/register", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(this.state)
-    })
-      .then(response => response.json())
-      .then(res => console.log(res));
+    });
+    const response = await request.json();
+    if (response.user) {
+      this.setState({
+        errorMessage: "",
+        successMessage: "You have successfully registered!"
+      });
+
+      setTimeout(() => {
+        this.props.history.push("/login");
+      }, 3000);
+    } else {
+      if (response.message.match(/username/)) {
+        console.log(response);
+        this.setState({ errorMessage: "Username has been taken" });
+      } else if (response.message.match(/email/)) {
+        this.setState({ errorMessage: "Email has been taken" });
+      }
+    }
   };
 
   render() {
     return (
       <Container>
+        {this.state.errorMessage && (
+          <Alert color="danger">{this.state.errorMessage}</Alert>
+        )}
+        {this.state.successMessage && (
+          <Alert color="success">{this.state.successMessage}</Alert>
+        )}
         <h2>Create your account</h2>
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
@@ -54,22 +93,16 @@ class Register extends React.Component {
               name="username"
               value={this.state.username}
               onChange={this.handleChange}
+              placeholder="Enter username"
             />
-            {/* <FormFeedback valid>Sweet! that name is available</FormFeedback> */}
           </FormGroup>
-          {/* <FormGroup>
-            <Label for="username" name="username" id="username">
-              Username
-            </Label>
-            <Input invalid />
-            <FormFeedback>Oh noes! that name is already taken</FormFeedback>
-          </FormGroup> */}
           <FormGroup>
             <Label for="email">Email</Label>
             <Input
               name="email"
               value={this.state.email}
               onChange={this.handleChange}
+              placeholder="Enter email"
             />
           </FormGroup>
           <FormGroup>
