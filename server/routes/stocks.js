@@ -11,7 +11,7 @@ router.get(
     try {
       const userid = req.user._id;
       const stocks = await Stock.find({ userid });
-      res.json(stocks);
+      res.json({ stocks });
     } catch (err) {
       console.log(err);
     }
@@ -35,18 +35,26 @@ router.post(
 );
 
 // Handle delete stock
-router.delete("/:id", async (req, res) => {
-  const stock = await Stock.findByIdAndDelete(req.params.id);
-  res.json({ status: "success" });
-});
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const stock = await Stock.findByIdAndDelete(req.params.id);
+    res.json({ status: "success" });
+  }
+);
 
 // Handle edit stock
-router.put("/:id", async (req, res) => {
-  const stock = await Stock.findByIdAndUpdate(req.params.id, req.body, {
-    new: true
-  });
-  res.json({ stock });
-});
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const stock = await Stock.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    });
+    res.json({ stock });
+  }
+);
 
 // router.use((err, req, res, next) => {
 //   // If err has no error code, set error code to 500

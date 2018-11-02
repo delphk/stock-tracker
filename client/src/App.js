@@ -24,6 +24,20 @@ class App extends Component {
     this.setState({ isLoggedIn: !this.state.isLoggedIn });
   };
 
+  async componentDidMount() {
+    try {
+      const request = await fetch("/stocks", {
+        method: "get"
+      });
+      const response = await request.json();
+      if (response.stocks) {
+        this.setState({ isLoggedIn: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   render() {
     console.log(this.state.isLoggedIn);
     return (

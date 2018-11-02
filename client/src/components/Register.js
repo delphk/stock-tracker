@@ -56,13 +56,15 @@ class Register extends React.Component {
       setTimeout(() => {
         this.props.history.push("/login");
       }, 3000);
-    } else {
+    } else if (response.message) {
       if (response.message.match(/username/)) {
         console.log(response);
         this.setState({ errorMessage: "Username has been taken" });
       } else if (response.message.match(/email/)) {
         this.setState({ errorMessage: "Email has been taken" });
       }
+    } else {
+      console.log(response);
     }
   };
 

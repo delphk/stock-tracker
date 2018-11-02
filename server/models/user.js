@@ -4,18 +4,25 @@ const uniqueValidator = require("mongoose-unique-validator");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config/jwt");
+const { isEmail } = require("validator");
 
 const userSchema = new Schema({
   username: {
     type: String,
     lowercase: true,
     unique: true,
-    require: true
+    required: true
   },
   salt: String,
   hash: String,
-  email: { type: String, lowercase: true, unique: true, require: true },
-  name: String
+  email: {
+    type: String,
+    lowercase: true,
+    unique: true,
+    required: true,
+    validate: [isEmail, "invalid email"]
+  },
+  name: { type: String, required: true }
 });
 
 function hashPassword(password, salt) {
