@@ -3,7 +3,6 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
   Container
@@ -20,35 +19,48 @@ class AppNavBar extends Component {
       isOpen: !this.state.isOpen
     });
   };
+
   render() {
     return (
       <div>
         <Navbar color="dark" dark expand="sm" className="mb-5">
           <Container>
-            <NavbarBrand href="/">$tockInfo</NavbarBrand>
+            <Link id="navbarbrand" to="/">
+              $tockTracker
+            </Link>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
                 {!this.props.isLoggedIn && (
                   <React.Fragment>
                     <NavItem>
-                      <Link to="/login">Login</Link>
+                      <Link id="navbarlink" to="/login">
+                        Login
+                      </Link>
                     </NavItem>
                     <NavItem>
-                      <Link to="/register">Register</Link>
+                      <Link id="navbarlink" to="/register">
+                        Register
+                      </Link>
                     </NavItem>
                   </React.Fragment>
                 )}
                 {this.props.isLoggedIn && (
                   <React.Fragment>
                     <NavItem>
-                      <Link to="/addstock">Add stocks</Link>
+                      <Link id="navbarlink" to="/addstock">
+                        Add stocks
+                      </Link>
                     </NavItem>
                     <NavItem>
-                      <Link to="/dashboard">Dashboard</Link>
+                      <Link id="navbarlink" to="/dashboard">
+                        Dashboard
+                      </Link>
                     </NavItem>
                     <NavItem>
-                      <Link to="/logout">Logout</Link>
+                      <Link id="navbarlink" to="/logout">
+                        Logout
+                      </Link>
                     </NavItem>
                   </React.Fragment>
                 )}

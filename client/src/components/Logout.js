@@ -6,14 +6,14 @@ class Logout extends Component {
       method: "post",
       headers: { "Content-Type": "application/json" }
     });
-    const response = await request.json();
-    console.log(response);
+    await request.json();
     this.props.toggleLogin();
-    // this.props.history.push("/login");
+    this.props.history.push("/");
   }
 
   render() {
-    return <div>Logged out!</div>;
+    console.log(this.props);
+    return <div style={{ textAlign: "center" }}>Logged out!</div>;
   }
 }
 

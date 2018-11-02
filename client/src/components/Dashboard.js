@@ -121,7 +121,7 @@ class Dashboard extends React.Component {
                         <Input name="newtargethigh" type="number" />
                       </ModalBody>
                       <ModalFooter>
-                        <Button color="primary">Do Something</Button>
+                        <Button color="secondary">Edit</Button>
                       </ModalFooter>
                     </form>
                   </Modal>

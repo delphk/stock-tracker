@@ -49,7 +49,7 @@ class App extends Component {
             <Switch>
               <Route
                 path="/login"
-                render={props => {
+                render={() => {
                   return this.state.isLoggedIn ? (
                     <Redirect to="/dashboard" />
                   ) : (
@@ -68,13 +68,47 @@ class App extends Component {
                   );
                 }}
               />
-              <Route path="/register" component={Register} />
-              <Route path="/addstock" component={AddStock} />
-              <Route path="/dashboard" component={Dashboard} />
+              <Route
+                path="/register"
+                render={() => {
+                  return this.state.isLoggedIn ? (
+                    <Redirect to="/dashboard" />
+                  ) : (
+                    <Register />
+                  );
+                }}
+              />
+              <Route
+                path="/addstock"
+                render={() => {
+                  return this.state.isLoggedIn ? (
+                    <AddStock />
+                  ) : (
+                    <Redirect to="/login" />
+                  );
+                }}
+              />
+              <Route
+                path="/dashboard"
+                render={() => {
+                  return this.state.isLoggedIn ? (
+                    <Dashboard />
+                  ) : (
+                    <Redirect to="/login" />
+                  );
+                }}
+              />
               <Route
                 path="/logout"
-                render={() => {
-                  return <Logout toggleLogin={this.toggleLogin} />;
+                render={props => {
+                  return this.state.isLoggedIn ? (
+                    <Logout
+                      history={props.history}
+                      toggleLogin={this.toggleLogin}
+                    />
+                  ) : (
+                    <Redirect to="/login" />
+                  );
                 }}
               />
               <Route component={NotFound} />
