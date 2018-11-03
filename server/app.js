@@ -3,17 +3,11 @@ if (process.env.NODE_ENV !== "production") {
 }
 const { passport } = require("./passport");
 const express = require("express"),
-  path = require("path"),
   bodyParser = require("body-parser"),
   morgan = require("morgan");
 cookieParser = require("cookie-parser");
 
 const app = express();
-
-//View Engine
-// app.set("views", path.join(__dirname, "views"));
-// app.engine("handlebars", exphbs({ defaultLayout: "layout" }));
-// app.set("view engine", "handlebars");
 
 // Middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,28 +16,14 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(passport.initialize());
 
-//Connect Flash
-// app.use(flash());
-
-//Global Vars
-// app.use((req, res, next) => {
-// res.locals.success_msg = req.flash("success_msg");
-// res.locals.error_msg = req.flash("error_msg");
-// res.locals.error = req.flash("error");
-//   res.locals.user = req.user || null;
-//   next();
-// });
-
 // if (process.env.NODE_ENV === "development") {
 //   app.use(errorhandler());
 // }
 
 // Routes
-const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const stockRouter = require("./routes/stocks");
 app.use("/users", userRouter);
-app.use("/", indexRouter);
 app.use("/stocks", stockRouter);
 
 // // catch 404 and forward to error handler

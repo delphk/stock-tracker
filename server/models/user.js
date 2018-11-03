@@ -11,7 +11,7 @@ const userSchema = new Schema({
     type: String,
     lowercase: true,
     unique: true,
-    required: true
+    required: [true, "is required"]
   },
   salt: String,
   hash: String,
@@ -19,10 +19,10 @@ const userSchema = new Schema({
     type: String,
     lowercase: true,
     unique: true,
-    required: true,
+    required: [true, "is required"],
     validate: [isEmail, "invalid email"]
   },
-  name: { type: String, required: true }
+  name: { type: String, required: [true, "is required"] }
 });
 
 function hashPassword(password, salt) {
