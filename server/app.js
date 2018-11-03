@@ -6,6 +6,7 @@ const express = require("express"),
   bodyParser = require("body-parser"),
   morgan = require("morgan");
 cookieParser = require("cookie-parser");
+path = require("path");
 
 const app = express();
 
@@ -16,10 +17,22 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(passport.initialize());
 
+const staticFiles = express.static(path.join(__dirname, "../client/build"));
+
+if (process.env.NODE_ENV === "production") {
+  app.use(staticFiles);
+}
+
 // Routes
 const userRouter = require("./routes/users");
 const stockRouter = require("./routes/stocks");
 app.use("/users", userRouter);
 app.use("/stocks", stockRouter);
+
+if (process.env.NODE_ENV === "production") {
+  app.get("/*", function(req, res) {
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  });
+}
 
 module.exports = app;
