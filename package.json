@@ -7,7 +7,8 @@
     "test": "concurrently \"cd client&&cross-env CI=true npm test\" \"cd server&&npm test\"",
     "build": "concurrently \"cd client && npm build\"",
     "heroku-postbuild": "npm build",
-    "start": "concurrently --kill-others-on-fail \"npm run start:dev:server\" \"npm run start:client\"",
+    "start": "concurrently --kill-others-on-fail \"npm run start:prod:server\" \"npm run start:client\"",
+    "start dev": "concurrently --kill-others-on-fail \"npm run start:dev:server\" \"npm run start:client\"",
     "start:prod:server": "cd server&&npm run start",
     "start:client": "cd client&&npm run start",
     "start:dev:server": "cd server&&npm run dev"
