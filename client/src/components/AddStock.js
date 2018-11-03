@@ -36,7 +36,6 @@ class AddStock extends React.Component {
       const name = response["companyName"];
       const symbol = response["symbol"];
       this.setState({ name, symbol, isSymbolValid: true, errorMessage: "" });
-      console.log(this.state);
     } catch {
       this.setState({ errorMessage: "No such stock exists :(" });
     }

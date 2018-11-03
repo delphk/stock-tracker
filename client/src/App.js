@@ -80,9 +80,9 @@ class App extends Component {
               />
               <Route
                 path="/addstock"
-                render={() => {
+                render={props => {
                   return this.state.isLoggedIn ? (
-                    <AddStock />
+                    <AddStock history={props.history} />
                   ) : (
                     <Redirect to="/login" />
                   );
