@@ -70,11 +70,11 @@ class App extends Component {
               />
               <Route
                 path="/register"
-                render={() => {
+                render={props => {
                   return this.state.isLoggedIn ? (
                     <Redirect to="/dashboard" />
                   ) : (
-                    <Register />
+                    <Register history={props.history} />
                   );
                 }}
               />
