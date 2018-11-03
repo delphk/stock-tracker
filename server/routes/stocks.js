@@ -39,8 +39,12 @@ router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const stock = await Stock.findByIdAndDelete(req.params.id);
-    res.json({ status: "success" });
+    try {
+      const stock = await Stock.findByIdAndDelete(req.params.id);
+      res.json({ status: "success" });
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
 
@@ -49,22 +53,15 @@ router.put(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const stock = await Stock.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
-    });
-    res.json({ stock });
+    try {
+      const stock = await Stock.findByIdAndUpdate(req.params.id, req.body, {
+        new: true
+      });
+      res.json({ stock });
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
-
-// router.use((err, req, res, next) => {
-//   // If err has no error code, set error code to 500
-//   if (!err.statusCode) {
-//     err.statusCode = 500;
-//     err.message = { message: "Internal server error" };
-//   }
-
-//   // send back specified status code and message
-//   res.status(err.statusCode).json({ message: err.message });
-// });
 
 module.exports = router;
