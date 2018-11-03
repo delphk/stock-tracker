@@ -132,7 +132,7 @@ describe("only saves valid email", () => {
       email: "ella@email.com",
       name: "ella"
     });
-    await expect(user.save()).resolves;
+    await expect(user.save()).resolves.toBe(user);
   });
 });
 

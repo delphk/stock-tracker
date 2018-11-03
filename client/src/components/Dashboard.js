@@ -56,7 +56,6 @@ class Dashboard extends React.Component {
 
   handleEdit = async (id, index, e) => {
     e.preventDefault();
-    console.log(index);
     const request = await fetch(`/stocks/${id}`, {
       method: "put",
       headers: { "Content-Type": "application/json" },
