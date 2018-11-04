@@ -8,9 +8,10 @@ i:hover {
   background-color: rgb(189, 189, 189);
   border: 1px solid transparent;
   border-radius: 50%;
-  padding: 0.5rem;
+  padding: 0.4rem;
 }
 
+/* Navbar formatting */
 #navbarbrand:hover,
 #navbarlink:hover {
   color: rgb(194, 192, 192);
@@ -25,4 +26,9 @@ i:hover {
 
 #navbarbrand {
   font-size: 1.5rem;
+}
+
+/* Format headers */
+#heading {
+  margin: 20px 0;
 }

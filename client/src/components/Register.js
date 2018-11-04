@@ -41,30 +41,35 @@ class Register extends React.Component {
     } else if (!this.ValidateEmail(email)) {
       return this.setState({ errorMessage: "Please enter a valid email" });
     }
-    const request = await fetch("/users/register", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.state)
-    });
-    const response = await request.json();
-    if (response.user) {
-      this.setState({
-        errorMessage: "",
-        successMessage: "You have successfully registered!"
+    try {
+      const request = await fetch("/users/register", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.state)
       });
+      const response = await request.json();
+      if (response.user) {
+        this.setState({
+          errorMessage: "",
+          successMessage: "You have successfully registered!"
+        });
 
-      setTimeout(() => {
-        this.props.history.push("/login");
-      }, 3000);
-    } else if (response.message) {
-      if (response.message.match(/username/)) {
+        setTimeout(() => {
+          this.props.history.push("/login");
+        }, 3000);
+      } else if (response.message) {
+        if (response.message.match(/username/)) {
+          this.setState({ errorMessage: "Username has been taken" });
+        } else if (response.message.match(/email/)) {
+          this.setState({
+            errorMessage: "An account with this email already exists"
+          });
+        }
+      } else {
         console.log(response);
-        this.setState({ errorMessage: "Username has been taken" });
-      } else if (response.message.match(/email/)) {
-        this.setState({ errorMessage: "Email has been taken" });
       }
-    } else {
-      console.log(response);
+    } catch (err) {
+      console.log(err);
     }
   };
 

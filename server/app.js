@@ -29,4 +29,10 @@ const stockRouter = require("./routes/stocks");
 app.use("/users", userRouter);
 app.use("/stocks", stockRouter);
 
+if (process.env.NODE_ENV === "production") {
+  app.get("/*", function(req, res) {
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+  });
+}
+
 module.exports = app;

@@ -24,6 +24,7 @@ class App extends Component {
     this.setState({ isLoggedIn: !this.state.isLoggedIn });
   };
 
+  // Checks whether user is logged in
   async componentDidMount() {
     try {
       const request = await fetch("/stocks", {
@@ -39,83 +40,77 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.isLoggedIn);
+    const { isLoggedIn } = this.state;
     return (
-      <React.Fragment>
-        <Router>
-          <div>
-            <AppNavBar isLoggedIn={this.state.isLoggedIn} />
+      <Router>
+        <React.Fragment>
+          <AppNavBar isLoggedIn={isLoggedIn} />
 
-            <Switch>
-              <Route
-                path="/login"
-                render={() => {
-                  return this.state.isLoggedIn ? (
-                    <Redirect to="/dashboard" />
-                  ) : (
-                    <Login toggleLogin={this.toggleLogin} />
-                  );
-                }}
-              />
-              <Route
-                exact
-                path="/"
-                render={() => {
-                  return this.state.isLoggedIn ? (
-                    <Redirect to="/dashboard" />
-                  ) : (
-                    <Redirect to="/login" />
-                  );
-                }}
-              />
-              <Route
-                path="/register"
-                render={props => {
-                  return this.state.isLoggedIn ? (
-                    <Redirect to="/dashboard" />
-                  ) : (
-                    <Register history={props.history} />
-                  );
-                }}
-              />
-              <Route
-                path="/addstock"
-                render={props => {
-                  return this.state.isLoggedIn ? (
-                    <AddStock history={props.history} />
-                  ) : (
-                    <Redirect to="/login" />
-                  );
-                }}
-              />
-              <Route
-                path="/dashboard"
-                render={() => {
-                  return this.state.isLoggedIn ? (
-                    <Dashboard />
-                  ) : (
-                    <Redirect to="/login" />
-                  );
-                }}
-              />
-              <Route
-                path="/logout"
-                render={props => {
-                  return this.state.isLoggedIn ? (
-                    <Logout
-                      history={props.history}
-                      toggleLogin={this.toggleLogin}
-                    />
-                  ) : (
-                    <Redirect to="/login" />
-                  );
-                }}
-              />
-              <Route component={NotFound} />
-            </Switch>
-          </div>
-        </Router>
-      </React.Fragment>
+          <Switch>
+            <Route
+              path="/login"
+              render={() => {
+                return isLoggedIn ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <Login toggleLogin={this.toggleLogin} />
+                );
+              }}
+            />
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return isLoggedIn ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <Redirect to="/login" />
+                );
+              }}
+            />
+            <Route
+              path="/register"
+              render={props => {
+                return isLoggedIn ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <Register history={props.history} />
+                );
+              }}
+            />
+            <Route
+              path="/addstock"
+              render={props => {
+                return isLoggedIn ? (
+                  <AddStock history={props.history} />
+                ) : (
+                  <Redirect to="/login" />
+                );
+              }}
+            />
+            <Route
+              path="/dashboard"
+              render={() => {
+                return isLoggedIn ? <Dashboard /> : <Redirect to="/login" />;
+              }}
+            />
+            <Route
+              path="/logout"
+              render={props => {
+                return isLoggedIn ? (
+                  <Logout
+                    history={props.history}
+                    toggleLogin={this.toggleLogin}
+                  />
+                ) : (
+                  <Redirect to="/login" />
+                );
+              }}
+            />
+            <Route component={NotFound} />
+          </Switch>
+        </React.Fragment>
+      </Router>
     );
   }
 }

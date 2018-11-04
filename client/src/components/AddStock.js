@@ -5,6 +5,7 @@ class AddStock extends React.Component {
   state = {
     name: "",
     symbol: "",
+    price: "",
     targetlow: undefined,
     targethigh: undefined,
     isSymbolValid: false,
@@ -17,25 +18,35 @@ class AddStock extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
-    const request = await fetch("/stocks", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.state)
-    });
-    const response = await request.json();
-    console.log(response);
-    this.props.history.push("/dashboard");
+    try {
+      const request = await fetch("/stocks", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.state)
+      });
+      const response = await request.json();
+      this.props.history.push("/dashboard");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  getSymbol = async value => {
-    console.log(value);
+  getSymbol = async (value, e) => {
+    e.preventDefault();
     const url = `https://api.iextrading.com/1.0/stock/${value}/quote`;
     try {
       const request = await fetch(url);
       const response = await request.json();
       const name = response["companyName"];
       const symbol = response["symbol"];
-      this.setState({ name, symbol, isSymbolValid: true, errorMessage: "" });
+      const price = response["close"];
+      this.setState({
+        name,
+        symbol,
+        price,
+        isSymbolValid: true,
+        errorMessage: ""
+      });
     } catch {
       this.setState({ errorMessage: "No such stock exists :(" });
     }
@@ -45,8 +56,8 @@ class AddStock extends React.Component {
     return (
       <Container>
         <h2>Add Stocks</h2>
-        <Form onSubmit={this.handleSubmit}>
-          {this.state.isSymbolValid === false && (
+        {this.state.isSymbolValid === false && (
+          <Form onSubmit={e => this.getSymbol(this.state.symbol, e)}>
             <FormGroup>
               <Label for="symbol">Symbol</Label>
               <Input
@@ -56,21 +67,18 @@ class AddStock extends React.Component {
                 onChange={this.handleChange}
                 placeholder="Enter symbol"
               />
-              <Button
-                className="mt-3"
-                onClick={() => this.getSymbol(this.state.symbol)}
-              >
-                Search
-              </Button>
+              <Button className="mt-3">Search</Button>
             </FormGroup>
-          )}
-          {<p style={{ color: "#e03428" }}>{this.state.errorMessage}</p>}
+          </Form>
+        )}
+        {<p style={{ color: "#e03428" }}>{this.state.errorMessage}</p>}
 
-          {this.state.isSymbolValid && (
-            <div>
-              <p>Symbol: {this.state.symbol}</p>
-              <p>Name: {this.state.name}</p>
-
+        {this.state.isSymbolValid && (
+          <div>
+            <p>Symbol: {this.state.symbol}</p>
+            <p>Name: {this.state.name}</p>
+            <p>Current price: ${this.state.price}</p>
+            <Form onSubmit={this.handleSubmit}>
               <FormGroup>
                 <Label for="targetlow">Target Low:</Label>
                 <Input
@@ -91,9 +99,9 @@ class AddStock extends React.Component {
                 />
               </FormGroup>
               <Button>Submit</Button>
-            </div>
-          )}
-        </Form>
+            </Form>
+          </div>
+        )}
       </Container>
     );
   }
