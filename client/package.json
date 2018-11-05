@@ -26,5 +26,9 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "jest-dom": "^2.1.0",
+    "react-testing-library": "^5.2.3"
+  }
 }

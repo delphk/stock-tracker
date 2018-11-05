@@ -96,33 +96,40 @@ class Dashboard extends React.Component {
 
   handleEdit = async (id, index, e) => {
     e.preventDefault();
-    const request = await fetch(`/stocks/${id}`, {
-      method: "put",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        targetlow: e.target.newtargetlow.value,
-        targethigh: e.target.newtargethigh.value
-      })
-    });
-    const response = await request.json();
-    console.log(response);
-    let stocks = [...this.state.stocks];
-    stocks[index]["targetlow"] = response.stock.targetlow;
-    stocks[index]["targethigh"] = response.stock.targethigh;
-    this.setState({ stocks });
-    this.toggleModal();
+    try {
+      const request = await fetch(`/stocks/${id}`, {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          targetlow: e.target.newtargetlow.value,
+          targethigh: e.target.newtargethigh.value
+        })
+      });
+      const response = await request.json();
+      console.log(response);
+      let stocks = [...this.state.stocks];
+      stocks[index]["targetlow"] = response.stock.targetlow;
+      stocks[index]["targethigh"] = response.stock.targethigh;
+      this.setState({ stocks });
+      this.toggleModal();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   handleDelete = async (id, index) => {
-    const request = await fetch(`/stocks/${id}`, {
-      method: "delete",
-      headers: { "Content-Type": "application/json" }
-    });
-    const response = await request.json();
-    console.log(response);
-    let stocks = [...this.state.stocks];
-    stocks.splice(index, 1);
-    this.setState({ stocks });
+    try {
+      const request = await fetch(`/stocks/${id}`, {
+        method: "delete",
+        headers: { "Content-Type": "application/json" }
+      });
+      const response = await request.json();
+      let stocks = [...this.state.stocks];
+      stocks.splice(index, 1);
+      this.setState({ stocks });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   render() {

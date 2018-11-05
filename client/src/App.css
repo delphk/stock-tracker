@@ -1,10 +1,12 @@
 /* Dashboard icons */
 
-i {
+.fa-edit,
+.fa-trash {
   margin-right: 1rem;
 }
 
-i:hover {
+.fa-edit:hover,
+.fa-trash:hover {
   background-color: rgb(189, 189, 189);
   border: 1px solid transparent;
   border-radius: 50%;
