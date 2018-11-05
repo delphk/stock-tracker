@@ -16,6 +16,7 @@ db.on("error", error => {
   console.log("An error occurred", error);
 });
 
-const server = app.listen(port, () => {
-  console.log(`Listening on port ${server.address().port}...`);
+app.set("port", process.env.PORT || 3001);
+app.listen(app.get("port"), () => {
+  console.log(`Listening on port ${app.get("port")}`);
 });
