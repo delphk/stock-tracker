@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const app = require("./app");
+const port = process.env.PORT || 3001;
 
 mongoose.connect(
   process.env.MONGODB_URI,
@@ -15,6 +16,6 @@ db.on("error", error => {
   console.log("An error occurred", error);
 });
 
-const server = app.listen(process.env.PORT || 3001, () => {
+const server = app.listen(port, () => {
   console.log(`Listening on port ${server.address().port}...`);
 });
