@@ -7,7 +7,7 @@ import {
   NavItem,
   Container
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 class AppNavBar extends Component {
   state = {
@@ -25,42 +25,72 @@ class AppNavBar extends Component {
       <div>
         <Navbar color="dark" dark expand="sm" className="mb-5">
           <Container>
-            <Link id="navbarbrand" to="/">
+            <NavLink id="navbarbrand" to="/">
               $tockTracker
-            </Link>
+            </NavLink>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
                 {!this.props.isLoggedIn && (
                   <React.Fragment>
                     <NavItem>
-                      <Link id="navbarlink" to="/login">
+                      <NavLink
+                        id="navbarlink"
+                        to="/login"
+                        activeStyle={{
+                          color: "#d4d3d3"
+                        }}
+                      >
                         Login
-                      </Link>
+                      </NavLink>
                     </NavItem>
                     <NavItem>
-                      <Link id="navbarlink" to="/register">
+                      <NavLink
+                        id="navbarlink"
+                        to="/register"
+                        activeStyle={{
+                          color: "#d4d3d3"
+                        }}
+                      >
                         Register
-                      </Link>
+                      </NavLink>
                     </NavItem>
                   </React.Fragment>
                 )}
                 {this.props.isLoggedIn && (
                   <React.Fragment>
                     <NavItem>
-                      <Link id="navbarlink" to="/addstock">
+                      <NavLink
+                        id="navbarlink"
+                        to="/addstock"
+                        activeStyle={{
+                          color: "#d4d3d3"
+                        }}
+                      >
                         Add stocks
-                      </Link>
+                      </NavLink>
                     </NavItem>
                     <NavItem>
-                      <Link id="navbarlink" to="/dashboard">
+                      <NavLink
+                        id="navbarlink"
+                        to="/dashboard"
+                        activeStyle={{
+                          color: "#d4d3d3"
+                        }}
+                      >
                         Dashboard
-                      </Link>
+                      </NavLink>
                     </NavItem>
                     <NavItem>
-                      <Link id="navbarlink" to="/logout">
+                      <NavLink
+                        id="navbarlink"
+                        to="/logout"
+                        activeStyle={{
+                          color: "#d4d3d3"
+                        }}
+                      >
                         Logout
-                      </Link>
+                      </NavLink>
                     </NavItem>
                   </React.Fragment>
                 )}
