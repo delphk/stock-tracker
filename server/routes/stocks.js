@@ -27,9 +27,9 @@ router.post(
       const newStock = new Stock(req.body);
       newStock.userid = req.user._id;
       await newStock.save();
-      res.json({ status: "success" });
+      res.status(201).json({ status: "success" });
     } catch (err) {
-      console.log(err);
+      res.status(400).json(err);
     }
   }
 );

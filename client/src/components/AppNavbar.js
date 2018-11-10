@@ -26,7 +26,7 @@ class AppNavBar extends Component {
         <Navbar color="dark" dark expand="sm" className="mb-5">
           <Container>
             <NavLink id="navbarbrand" to="/">
-              $tockTracker
+              $TOCKer
             </NavLink>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
@@ -62,17 +62,6 @@ class AppNavBar extends Component {
                     <NavItem>
                       <NavLink
                         id="navbarlink"
-                        to="/addstock"
-                        activeStyle={{
-                          color: "#d4d3d3"
-                        }}
-                      >
-                        Add stocks
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        id="navbarlink"
                         to="/dashboard"
                         activeStyle={{
                           color: "#d4d3d3"
@@ -81,6 +70,19 @@ class AppNavBar extends Component {
                         Dashboard
                       </NavLink>
                     </NavItem>
+
+                    <NavItem>
+                      <NavLink
+                        id="navbarlink"
+                        to="/addstock"
+                        activeStyle={{
+                          color: "#d4d3d3"
+                        }}
+                      >
+                        Add stocks
+                      </NavLink>
+                    </NavItem>
+
                     <NavItem>
                       <NavLink
                         id="navbarlink"

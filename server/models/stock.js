@@ -18,6 +18,8 @@ const stockSchema = new Schema({
   targethigh: Number
 });
 
+stockSchema.index({ symbol: -1, userid: 1 }, { unique: true });
+
 const Stock = mongoose.model("Stock", stockSchema);
 
 module.exports = Stock;

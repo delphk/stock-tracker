@@ -11,10 +11,6 @@ import {
 } from "recharts";
 
 class Historical extends Component {
-  state = {
-    data: []
-  };
-
   getRandomColor() {
     var letters = "0123456789ABCDEF";
     var color = "#";

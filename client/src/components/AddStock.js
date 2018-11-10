@@ -1,16 +1,29 @@
 import React from "react";
-import { Container, Button, Form, FormGroup, Label, Input } from "reactstrap";
+import {
+  Alert,
+  Container,
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input
+} from "reactstrap";
 
 class AddStock extends React.Component {
-  state = {
-    name: "",
-    symbol: "",
-    price: "",
-    targetlow: undefined,
-    targethigh: undefined,
-    isSymbolValid: false,
-    errorMessage: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      symbol: "",
+      price: "",
+      targetlow: undefined,
+      targethigh: undefined,
+      isSymbolValid: false,
+      errorMessage: ""
+    };
+
+    this.initialState = this.state;
+  }
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -24,11 +37,23 @@ class AddStock extends React.Component {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.state)
       });
+      console.log("request:", request);
       const response = await request.json();
-      this.props.history.push("/dashboard");
+      console.log("response:", response);
+      if (request.status === 201) {
+        this.props.history.push("/dashboard");
+      } else {
+        this.setState({
+          errorMessage: "This stock is already in your dashboard"
+        });
+      }
     } catch (err) {
       console.log(err);
     }
+  };
+
+  resetState = () => {
+    this.setState(this.initialState);
   };
 
   getSymbol = async (value, e) => {
@@ -53,9 +78,14 @@ class AddStock extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <Container>
+        {this.state.errorMessage && (
+          <Alert color="danger">{this.state.errorMessage}</Alert>
+        )}
         <h2>Add Stocks</h2>
+
         {this.state.isSymbolValid === false && (
           <Form onSubmit={e => this.getSymbol(this.state.symbol, e)}>
             <FormGroup>
@@ -71,7 +101,6 @@ class AddStock extends React.Component {
             </FormGroup>
           </Form>
         )}
-        {<p style={{ color: "#e03428" }}>{this.state.errorMessage}</p>}
 
         {this.state.isSymbolValid && (
           <div>
@@ -98,7 +127,8 @@ class AddStock extends React.Component {
                   onChange={this.handleChange}
                 />
               </FormGroup>
-              <Button>Submit</Button>
+              <Button id="button">Submit</Button>
+              <Button onClick={this.resetState}>Reset</Button>
             </Form>
           </div>
         )}

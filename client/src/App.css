@@ -1,7 +1,8 @@
 /* Dashboard icons */
 
 .fa-edit,
-.fa-trash {
+.fa-trash,
+#button {
   margin-right: 1rem;
 }
 
@@ -16,7 +17,7 @@
 /* Navbar formatting */
 #navbarbrand:hover,
 #navbarlink:hover {
-  color: rgb(194, 192, 192);
+  color: #a5a5a5;
 }
 
 #navbarlink,
@@ -27,7 +28,9 @@
 }
 
 #navbarbrand {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 0.2rem;
 }
 
 /* Format headers */
