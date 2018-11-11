@@ -12,7 +12,7 @@ describe("Stock model", () => {
   beforeEach(async () => await stock.save());
 
   it("should be able to save new stock", async () => {
-    const stock2 = new Stock({ symbol, name, userid });
+    const stock2 = new Stock({ symbol: "AAPL", name: "Apple Inc", userid });
     await expect(stock2.save()).resolves.toBe(stock2);
   });
 

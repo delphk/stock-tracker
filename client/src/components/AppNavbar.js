@@ -24,7 +24,7 @@ class AppNavBar extends Component {
   render() {
     return (
       <div>
-        <Navbar color="secondary" secondary expand="sm" className="mb-5">
+        <Navbar color="secondary" dark expand="sm" className="mb-5">
           <Container>
             <img
               id="logo"
