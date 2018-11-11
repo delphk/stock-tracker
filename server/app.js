@@ -2,11 +2,12 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").load();
 }
 const { passport } = require("./passport");
+const alert = require("./cron-alert");
 const express = require("express"),
   bodyParser = require("body-parser"),
-  morgan = require("morgan");
-cookieParser = require("cookie-parser");
-path = require("path");
+  morgan = require("morgan"),
+  cookieParser = require("cookie-parser"),
+  path = require("path");
 
 const app = express();
 
@@ -28,5 +29,8 @@ const userRouter = require("./routes/users");
 const stockRouter = require("./routes/stocks");
 app.use("/users", userRouter);
 app.use("/stocks", stockRouter);
+
+//Scheduled tasks
+alert.start();
 
 module.exports = app;

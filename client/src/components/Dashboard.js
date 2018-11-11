@@ -53,7 +53,7 @@ class Dashboard extends React.Component {
       // Get stock prices for each symbol
       const arrayOfStockPrices = [];
       for (let i = 0; i < arrayOfSymbols.length; i++) {
-        const prices = response[arrayOfSymbols[i]]["quote"]["close"];
+        const prices = response[arrayOfSymbols[i]]["quote"]["latestPrice"];
         arrayOfStockPrices.push(prices);
       }
       let stocks = [...this.state.stocks];

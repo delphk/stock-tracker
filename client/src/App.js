@@ -7,6 +7,7 @@ import AddStock from "./components/AddStock";
 import Dashboard from "./components/Dashboard";
 import Logout from "./components/Logout";
 import NotFound from "./components/NotFound";
+import Settings from "./components/Settings";
 
 import {
   BrowserRouter as Router,
@@ -107,6 +108,7 @@ class App extends Component {
                 );
               }}
             />
+            <Route path="/settings" component={Settings} />
             <Route component={NotFound} />
           </Switch>
         </React.Fragment>

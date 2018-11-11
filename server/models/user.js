@@ -15,6 +15,8 @@ const userSchema = new Schema({
   },
   salt: String,
   hash: String,
+  isVerified: { type: Boolean, default: false },
+  emailAlert: { type: Boolean, default: false },
   email: {
     type: String,
     lowercase: true,
