@@ -37,9 +37,7 @@ class AddStock extends React.Component {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.state)
       });
-      console.log("request:", request);
       const response = await request.json();
-      console.log("response:", response);
       if (request.status === 201) {
         this.props.history.push("/dashboard");
       } else {
@@ -78,7 +76,6 @@ class AddStock extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <Container>
         {this.state.errorMessage && (

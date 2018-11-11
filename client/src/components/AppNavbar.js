@@ -8,6 +8,7 @@ import {
   Container
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
+import stocker from "../img/stocker.png";
 
 class AppNavBar extends Component {
   state = {
@@ -23,8 +24,14 @@ class AppNavBar extends Component {
   render() {
     return (
       <div>
-        <Navbar color="dark" dark expand="sm" className="mb-5">
+        <Navbar color="secondary" secondary expand="sm" className="mb-5">
           <Container>
+            <img
+              id="logo"
+              alt="logo"
+              src={stocker}
+              style={{ width: "40px", height: "40px" }}
+            />
             <NavLink id="navbarbrand" to="/">
               $TOCKer
             </NavLink>
@@ -82,7 +89,17 @@ class AppNavBar extends Component {
                         Add stocks
                       </NavLink>
                     </NavItem>
-
+                    <NavItem>
+                      <NavLink
+                        id="navbarlink"
+                        to="/settings"
+                        activeStyle={{
+                          color: "#d4d3d3"
+                        }}
+                      >
+                        Settings
+                      </NavLink>
+                    </NavItem>
                     <NavItem>
                       <NavLink
                         id="navbarlink"
