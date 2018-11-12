@@ -5,7 +5,8 @@ import {
   Button,
   Modal,
   ModalHeader,
-  ModalBody
+  ModalBody,
+  Table
 } from "reactstrap";
 
 class Settings extends React.Component {
@@ -96,35 +97,57 @@ class Settings extends React.Component {
           </Alert>
         )}
         <h2 id="heading">User Info</h2>
-        <p>Name: {this.state.userInfo.name}</p>
-        <p>Username: {this.state.userInfo.username}</p>
-        <p>
-          Email: {this.state.userInfo.email}{" "}
-          {this.state.userInfo.isVerified ? (
-            <span id="verified">
-              <em>Verified</em>
-            </span>
-          ) : (
-            <span id="unverified">
-              <em>Unverified</em>
-            </span>
-          )}
-        </p>
+
+        <Table borderless>
+          <tbody>
+            <tr>
+              <th scope="row">Name:</th>
+              <td>{this.state.userInfo.name}</td>
+            </tr>
+            <tr>
+              <th scope="row">Username:</th>
+              <td>{this.state.userInfo.username}</td>
+            </tr>
+            <tr>
+              <th scope="row">Email:</th>
+              <td>
+                {this.state.userInfo.email}{" "}
+                {this.state.userInfo.isVerified ? (
+                  <span id="verified">
+                    <em>Verified</em>
+                  </span>
+                ) : (
+                  <span id="unverified">
+                    <em>Unverified</em>
+                  </span>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+
         <h2 id="heading">Preferences</h2>
-        <p>
-          Email Price Alerts{" "}
-          <span className="toggle-switch">
-            <label className="switch">
-              <input
-                type="checkbox"
-                disabled={!this.state.userInfo.isVerified}
-                checked={this.state.userInfo.emailAlert}
-                onClick={this.toggleAlert}
-              />
-              <span className="slider round" />
-            </label>
-          </span>
-        </p>
+        <Table borderless>
+          <tbody>
+            <tr>
+              <th scope="row">Email Price Alerts:</th>
+              <td>
+                {" "}
+                <span className="toggle-switch">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      disabled={!this.state.userInfo.isVerified}
+                      checked={this.state.userInfo.emailAlert}
+                      onClick={this.toggleAlert}
+                    />
+                    <span className="slider round" />
+                  </label>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
       </Container>
     );
   }

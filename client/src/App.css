@@ -115,5 +115,5 @@ input:checked + .slider:before {
 }
 
 .toggle-switch {
-  margin-left: 2rem;
+  margin-right: 20rem;
 }
