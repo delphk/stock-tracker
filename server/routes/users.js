@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const crypto = require("crypto");
 
-const nodemailerMailgun = require("../utils/email_service");
+const sgMail = require("../utils/sendgrid");
 const User = require("../models/user");
 const Token = require("../models/token");
 
@@ -73,19 +73,23 @@ router.post(
     });
     try {
       await token.save();
-      const mailOptions = {
-        from: process.env.FROM_ADDRESS,
+
+      const msg = {
         to: toAddress,
+        from: process.env.FROM_ADDRESS,
         subject: "Account Verification Token",
         text:
-          "Hello,\n\n" +
+          "Hello " +
+          req.user.name +
+          ",\n\n" +
           "Please verify your account by clicking the link: \nhttp://" +
           req.headers.host +
           "/users/confirmation/" +
           token.token +
           ".\n"
       };
-      nodemailerMailgun.sendMail(mailOptions, err => {
+
+      sgMail.send(msg, err => {
         if (err) {
           return res.status(500).send({ msg: err.message });
         }

@@ -1,6 +1,6 @@
 const cron = require("node-cron"),
   axios = require("axios"),
-  nodemailerMailgun = require("./utils/email_service");
+  sgMail = require("./utils/sendgrid");
 
 const Stock = require("./models/stock");
 const User = require("./models/user");
@@ -36,25 +36,24 @@ const alert = cron.schedule(
         ) {
           const user = await User.findById(stocks[i].userid);
           if (user.emailAlert) {
-            nodemailerMailgun.sendMail(
-              {
-                from: process.env.FROM_ADDRESS,
-                to: user.email,
-                subject: `$TOCKer Alert for ${stocks[i].name}`,
-                html: `<b>Current price of ${stocks[i].name} is $${
-                  arrayOfStockPrices[i]
-                } which is more than your target price of $${
-                  stocks[i].targethigh
-                }</b>`
-              },
-              (err, info) => {
-                if (err) {
-                  console.log("Error: " + err);
-                } else {
-                  console.log("Response: " + info);
-                }
+            const msg = {
+              to: user.email,
+              from: process.env.FROM_ADDRESS,
+              subject: `$TOCKer Alert for ${stocks[i].name}`,
+              html: `<b>Current price of ${stocks[i].name} is $${
+                arrayOfStockPrices[i]
+              } which is more than your target price of $${
+                stocks[i].targethigh
+              }</b>`
+            };
+
+            sgMail.send(msg, (err, info) => {
+              if (err) {
+                console.log("Error: " + err);
+              } else {
+                console.log("Response: " + info);
               }
-            );
+            });
             await Stock.findByIdAndUpdate(stocks[i]._id, {
               targethigh: null
             });
@@ -69,25 +68,25 @@ const alert = cron.schedule(
         ) {
           const user = await User.findById(stocks[i].userid);
           if (user.emailAlert) {
-            nodemailerMailgun.sendMail(
-              {
-                from: process.env.FROM_ADDRESS,
-                to: user.email,
-                subject: `$TOCKer Alert for ${stocks[i].name}`,
-                html: `<b>Current price of ${stocks[i].name} is $${
-                  arrayOfStockPrices[i]
-                } which is less than your target price of $${
-                  stocks[i].targetlow
-                }</b>`
-              },
-              (err, info) => {
-                if (err) {
-                  console.log("Error: " + err);
-                } else {
-                  console.log("Response: " + info);
-                }
+            const msg = {
+              to: user.email,
+              from: process.env.FROM_ADDRESS,
+              subject: `$TOCKer Alert for ${stocks[i].name}`,
+              html: `<b>Current price of ${stocks[i].name} is $${
+                arrayOfStockPrices[i]
+              } which is less than your target price of $${
+                stocks[i].targetlow
+              }</b>`
+            };
+
+            sgMail.send(msg, (err, info) => {
+              if (err) {
+                console.log("Error: " + err);
+              } else {
+                console.log("Response: " + info);
               }
-            );
+            });
+
             await Stock.findByIdAndUpdate(stocks[i]._id, {
               targetlow: null
             });
