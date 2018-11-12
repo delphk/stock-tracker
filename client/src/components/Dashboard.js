@@ -17,7 +17,8 @@ class Dashboard extends React.Component {
   state = {
     stocks: [],
     modalIndex: undefined,
-    data: []
+    data: [],
+    isLoading: true
   };
 
   toggleModal = index => {
@@ -35,6 +36,8 @@ class Dashboard extends React.Component {
       this.setState({ stocks: response.stocks });
       if (this.state.stocks.length > 0) {
         this.getStockPrices();
+      } else {
+        this.setState({ isLoading: false });
       }
     } catch (err) {
       console.log(err);
@@ -59,7 +62,8 @@ class Dashboard extends React.Component {
       let stocks = [...this.state.stocks];
       stocks.map((stock, index) => (stock.price = arrayOfStockPrices[index]));
       this.setState({
-        stocks
+        stocks,
+        isLoading: false
       });
 
       //Get historical data
@@ -123,7 +127,7 @@ class Dashboard extends React.Component {
         method: "delete",
         headers: { "Content-Type": "application/json" }
       });
-      const response = await request.json();
+      await request.json();
       let stocks = [...this.state.stocks];
       stocks.splice(index, 1);
       this.setState({ stocks });
@@ -134,88 +138,92 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <Container>
-        <h2 id="heading">Dashboard</h2>
-        {this.state.stocks.length === 0 && (
-          <h5>
-            Click <Link to="/addstock">here</Link> to add stocks to your
-            watchlist!
-          </h5>
-        )}
-        {this.state.stocks.length > 0 && (
-          <React.Fragment>
-            <Table striped responsive>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Stock name</th>
-                  <th>Symbol</th>
-                  <th>Current price</th>
-                  <th>Target low price</th>
-                  <th>Target high price</th>
-                  <th>Edit/ Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.stocks.map((stock, index) => {
-                  return (
-                    <tr key={index}>
-                      <Modal
-                        isOpen={this.state.modalIndex === index}
-                        toggle={this.toggleModal}
-                      >
-                        <ModalHeader toggle={this.toggleModal}>
-                          Edit Target Price
-                        </ModalHeader>
-                        <form
-                          onSubmit={e => this.handleEdit(stock._id, index, e)}
+      !this.state.isLoading && (
+        <Container>
+          <h2 id="heading">Dashboard</h2>
+          {this.state.stocks.length === 0 && (
+            <h5>
+              Click <Link to="/addstock">here</Link> to add stocks to your
+              watchlist!
+            </h5>
+          )}
+          {this.state.stocks.length > 0 && (
+            <React.Fragment>
+              <Table striped responsive>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Stock name</th>
+                    <th>Symbol</th>
+                    <th>Current price</th>
+                    <th>Target low price</th>
+                    <th>Target high price</th>
+                    <th>Edit/ Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.stocks.map((stock, index) => {
+                    return (
+                      <tr key={index}>
+                        <Modal
+                          isOpen={this.state.modalIndex === index}
+                          toggle={this.toggleModal}
                         >
-                          <ModalBody>
-                            <Label>Target Low:</Label>{" "}
-                            <Input name="newtargetlow" type="number" />
-                            <Label>Target High:</Label>{" "}
-                            <Input name="newtargethigh" type="number" />
-                          </ModalBody>
-                          <ModalFooter>
-                            <Button color="secondary">Edit</Button>
-                          </ModalFooter>
-                        </form>
-                      </Modal>
-                      <th scope="row">{index + 1}</th>
-                      <td>{stock.name}</td>
-                      <td>{stock.symbol}</td>
-                      <td>
-                        {stock.price ? this.formatStockPrice(stock.price) : ""}
-                      </td>
-                      <td>
-                        {stock.targetlow
-                          ? this.formatStockPrice(stock.targetlow)
-                          : "-"}
-                      </td>
-                      <td>
-                        {stock.targethigh
-                          ? this.formatStockPrice(stock.targethigh)
-                          : "-"}
-                      </td>
-                      <td>
-                        <i
-                          className="fa fa-edit fa-lg"
-                          onClick={() => this.toggleModal(index)}
-                        />
-                        <i
-                          className="fa fa-trash fa-lg"
-                          onClick={() => this.handleDelete(stock._id, index)}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-            <Historical data={this.state.data} />
-          </React.Fragment>
-        )}
-      </Container>
+                          <ModalHeader toggle={this.toggleModal}>
+                            Edit Target Price
+                          </ModalHeader>
+                          <form
+                            onSubmit={e => this.handleEdit(stock._id, index, e)}
+                          >
+                            <ModalBody>
+                              <Label>Target Low:</Label>{" "}
+                              <Input name="newtargetlow" type="number" />
+                              <Label>Target High:</Label>{" "}
+                              <Input name="newtargethigh" type="number" />
+                            </ModalBody>
+                            <ModalFooter>
+                              <Button color="secondary">Edit</Button>
+                            </ModalFooter>
+                          </form>
+                        </Modal>
+                        <th scope="row">{index + 1}</th>
+                        <td>{stock.name}</td>
+                        <td>{stock.symbol}</td>
+                        <td>
+                          {stock.price
+                            ? this.formatStockPrice(stock.price)
+                            : ""}
+                        </td>
+                        <td>
+                          {stock.targetlow
+                            ? this.formatStockPrice(stock.targetlow)
+                            : "-"}
+                        </td>
+                        <td>
+                          {stock.targethigh
+                            ? this.formatStockPrice(stock.targethigh)
+                            : "-"}
+                        </td>
+                        <td>
+                          <i
+                            className="fa fa-edit fa-lg"
+                            onClick={() => this.toggleModal(index)}
+                          />
+                          <i
+                            className="fa fa-trash fa-lg"
+                            onClick={() => this.handleDelete(stock._id, index)}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+              <Historical data={this.state.data} />
+            </React.Fragment>
+          )}
+        </Container>
+      )
     );
   }
 }
