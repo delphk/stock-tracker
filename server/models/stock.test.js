@@ -16,6 +16,11 @@ describe("Stock model", () => {
     await expect(stock2.save()).resolves.toBe(stock2);
   });
 
+  it("should not allow two of the same stock to be saved for the same user", async () => {
+    const stock3 = new Stock({ symbol, name, userid });
+    await expect(stock3.save()).rejects.toThrow("duplicate key error");
+  });
+
   it("can be searched by id", async () => {
     const searchResult = await Stock.findOne({ _id: stock._id });
     expect(searchResult.symbol).toEqual(stock.symbol);

@@ -65,8 +65,6 @@ class Register extends React.Component {
             errorMessage: "An account with this email already exists"
           });
         }
-      } else {
-        console.log(response);
       }
     } catch (err) {
       console.log(err);
@@ -83,14 +81,13 @@ class Register extends React.Component {
           <Alert color="success">{this.state.successMessage}</Alert>
         )}
         <h2>Create your account</h2>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} onChange={this.handleChange}>
           <FormGroup>
             <Label for="name">Name</Label>
             <Input
               type="text"
               name="name"
               value={this.state.name}
-              onChange={this.handleChange}
               placeholder="Enter name"
             />
           </FormGroup>
@@ -99,7 +96,6 @@ class Register extends React.Component {
             <Input
               name="username"
               value={this.state.username}
-              onChange={this.handleChange}
               placeholder="Enter username"
             />
           </FormGroup>
@@ -108,7 +104,6 @@ class Register extends React.Component {
             <Input
               name="email"
               value={this.state.email}
-              onChange={this.handleChange}
               placeholder="Enter email"
             />
           </FormGroup>
@@ -118,7 +113,6 @@ class Register extends React.Component {
               type="password"
               name="password"
               value={this.state.password}
-              onChange={this.handleChange}
               placeholder="Enter password"
             />
           </FormGroup>
@@ -128,7 +122,6 @@ class Register extends React.Component {
               type="password"
               name="password2"
               value={this.state.password2}
-              onChange={this.handleChange}
               placeholder="Enter password again"
             />
           </FormGroup>

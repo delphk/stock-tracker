@@ -16,7 +16,6 @@ class Logout extends Component {
   }
 
   render() {
-    console.log(this.props);
     return <div style={{ textAlign: "center" }}>Logged out!</div>;
   }
 }

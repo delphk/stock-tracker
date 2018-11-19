@@ -31,9 +31,8 @@ async function loginAsAshley(password, agent) {
 }
 
 describe("User authentication", () => {
-  beforeEach(async () => await createFakeUsers());
-
   it("should authenticate user", async () => {
+    await createFakeUsers();
     const { username, password, email } = users.user;
     let response = await request(app)
       .post("/users/login")
@@ -45,6 +44,29 @@ describe("User authentication", () => {
     const jwtTokenCookie = [expect.stringMatching(/jwt/)];
     expect(response.headers["set-cookie"]).toEqual(
       expect.arrayContaining(jwtTokenCookie)
+    );
+  });
+
+  it("should not authenticate user with invalid password", async () => {
+    const { username } = users.user;
+    let response = await request(app)
+      .post("/users/login")
+      .send({ username, password: "boguspassword" });
+
+    expect(response.status).toBe(403);
+    expect(response.body.error.message).toEqual(
+      "Username and/or password is invalid"
+    );
+  });
+
+  it("should not authenticate user with invalid username", async () => {
+    let response = await request(app)
+      .post("/users/login")
+      .send({ username: "bogus", password: "boguspassword" });
+
+    expect(response.status).toBe(403);
+    expect(response.body.error.message).toEqual(
+      "Username and/or password is invalid"
     );
   });
 });
