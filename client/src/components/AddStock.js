@@ -8,6 +8,7 @@ import {
   Label,
   Input
 } from "reactstrap";
+import { withRouter } from "react-router-dom";
 
 class AddStock extends React.Component {
   constructor(props) {
@@ -134,4 +135,4 @@ class AddStock extends React.Component {
   }
 }
 
-export default AddStock;
+export default withRouter(AddStock);

@@ -71,22 +71,14 @@ class App extends Component {
             />
             <Route
               path="/register"
-              render={props => {
-                return isLoggedIn ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <Register history={props.history} />
-                );
+              render={() => {
+                return isLoggedIn ? <Redirect to="/dashboard" /> : <Register />;
               }}
             />
             <Route
               path="/addstock"
-              render={props => {
-                return isLoggedIn ? (
-                  <AddStock history={props.history} />
-                ) : (
-                  <Redirect to="/login" />
-                );
+              render={() => {
+                return isLoggedIn ? <AddStock /> : <Redirect to="/login" />;
               }}
             />
             <Route
@@ -97,12 +89,9 @@ class App extends Component {
             />
             <Route
               path="/logout"
-              render={props => {
+              render={() => {
                 return isLoggedIn ? (
-                  <Logout
-                    history={props.history}
-                    toggleLogin={this.toggleLogin}
-                  />
+                  <Logout toggleLogin={this.toggleLogin} />
                 ) : (
                   <Redirect to="/login" />
                 );

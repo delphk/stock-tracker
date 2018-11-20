@@ -8,6 +8,7 @@ import {
   Label,
   Input
 } from "reactstrap";
+import { withRouter } from "react-router-dom";
 
 class Register extends React.Component {
   state = {
@@ -132,4 +133,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+export default withRouter(Register);

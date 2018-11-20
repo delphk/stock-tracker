@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 class Logout extends Component {
   async componentDidMount() {
@@ -20,4 +21,4 @@ class Logout extends Component {
   }
 }
 
-export default Logout;
+export default withRouter(Logout);
