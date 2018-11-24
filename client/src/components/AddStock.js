@@ -82,13 +82,14 @@ class AddStock extends React.Component {
         {this.state.errorMessage && (
           <Alert color="danger">{this.state.errorMessage}</Alert>
         )}
-        <h2>Add Stocks</h2>
+        <h2 id="heading">Add Stocks</h2>
 
         {this.state.isSymbolValid === false && (
           <Form onSubmit={e => this.getSymbol(this.state.symbol, e)}>
             <FormGroup>
               <Label for="symbol">Symbol</Label>
               <Input
+                id="shortinput"
                 type="text"
                 name="symbol"
                 value={this.state.symbol}
@@ -109,6 +110,7 @@ class AddStock extends React.Component {
               <FormGroup>
                 <Label for="targetlow">Target Low:</Label>
                 <Input
+                  id="shortinput"
                   type="number"
                   name="targetlow"
                   value={this.state.targetlow}
@@ -117,8 +119,9 @@ class AddStock extends React.Component {
               </FormGroup>
 
               <FormGroup>
-                <Label for="targethigh">Target High</Label>
+                <Label for="targethigh">Target High:</Label>
                 <Input
+                  id="shortinput"
                   type="number"
                   name="targethigh"
                   value={this.state.targethigh}

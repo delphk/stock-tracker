@@ -117,3 +117,8 @@ input:checked + .slider:before {
 .toggle-switch {
   margin-right: 20rem;
 }
+
+/* Input fields */
+#shortinput {
+  max-width: 300px;
+}
