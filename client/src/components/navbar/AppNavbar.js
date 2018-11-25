@@ -8,7 +8,7 @@ import {
   Container
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
-import stocker from "../img/stocker.png";
+import stocker from "../../assets/stocker.png";
 
 class AppNavBar extends Component {
   state = {

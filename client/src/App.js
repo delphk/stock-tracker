@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
-import AppNavBar from "./components/AppNavbar";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import AddStock from "./components/AddStock";
-import Dashboard from "./components/Dashboard";
-import Logout from "./components/Logout";
-import NotFound from "./components/NotFound";
-import Settings from "./components/Settings";
+import AppNavBar from "./components/navbar/AppNavbar";
+import Login from "./components/login/Login";
+import Register from "./components/register/Register";
+import AddStock from "./components/addstock/AddStock";
+import Dashboard from "./components/dashboard/Dashboard";
+import Logout from "./components/logout/Logout";
+import NotFound from "./components/notfound/NotFound";
+import Settings from "./components/settings/Settings";
 
 import {
   BrowserRouter as Router,

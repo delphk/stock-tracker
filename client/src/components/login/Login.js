@@ -50,6 +50,7 @@ class Login extends React.Component {
           <FormGroup>
             <Label for="username">Username</Label>
             <Input
+              id="username"
               type="text"
               name="username"
               value={this.state.username}
@@ -59,6 +60,7 @@ class Login extends React.Component {
           <FormGroup>
             <Label for="password">Password</Label>
             <Input
+              id="password"
               type="password"
               name="password"
               value={this.state.password}

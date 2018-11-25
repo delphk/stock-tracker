@@ -11,8 +11,8 @@ import {
   Input
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import Historical from "./Historical";
-import Spinner from "./Spinner";
+import Historical from "../historical/Historical";
+import Spinner from "../spinner/Spinner";
 
 class Dashboard extends React.Component {
   state = {

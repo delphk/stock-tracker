@@ -86,6 +86,7 @@ class Register extends React.Component {
           <FormGroup>
             <Label for="name">Name</Label>
             <Input
+              id="name"
               type="text"
               name="name"
               value={this.state.name}
@@ -95,6 +96,7 @@ class Register extends React.Component {
           <FormGroup>
             <Label for="username">Username</Label>
             <Input
+              id="username"
               name="username"
               value={this.state.username}
               placeholder="Enter username"
@@ -103,6 +105,7 @@ class Register extends React.Component {
           <FormGroup>
             <Label for="email">Email</Label>
             <Input
+              id="email"
               name="email"
               value={this.state.email}
               placeholder="Enter email"
@@ -111,6 +114,7 @@ class Register extends React.Component {
           <FormGroup>
             <Label for="password">Password</Label>
             <Input
+              id="password"
               type="password"
               name="password"
               value={this.state.password}
@@ -120,6 +124,7 @@ class Register extends React.Component {
           <FormGroup>
             <Label for="password2">Confirm Password</Label>
             <Input
+              id="password2"
               type="password"
               name="password2"
               value={this.state.password2}

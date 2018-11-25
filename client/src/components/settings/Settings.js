@@ -8,7 +8,7 @@ import {
   ModalBody,
   Table
 } from "reactstrap";
-import Spinner from "./Spinner";
+import Spinner from "../spinner/Spinner";
 
 class Settings extends React.Component {
   state = {
