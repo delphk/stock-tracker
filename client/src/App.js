@@ -8,6 +8,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Logout from "./components/logout/Logout";
 import NotFound from "./components/notfound/NotFound";
 import Settings from "./components/settings/Settings";
+import { getStocks } from "./helpers/api/api";
 
 import {
   BrowserRouter as Router,
@@ -28,11 +29,8 @@ class App extends Component {
   // Checks whether user is logged in
   async componentDidMount() {
     try {
-      const request = await fetch("/stocks", {
-        method: "get"
-      });
-      const response = await request.json();
-      if (response.stocks) {
+      const response = await getStocks();
+      if (response.data.stocks) {
         this.setState({ isLoggedIn: true });
       }
     } catch (err) {
