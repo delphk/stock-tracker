@@ -9,6 +9,7 @@ import {
   Input
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
+import { addStock, searchSymbol } from "../../helpers/api/api";
 
 class AddStock extends React.Component {
   constructor(props) {
@@ -33,21 +34,14 @@ class AddStock extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
     try {
-      const request = await fetch("/stocks", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(this.state)
-      });
-      const response = await request.json();
-      if (request.status === 201) {
+      const response = await addStock(this.state);
+      if (response.status === 201) {
         this.props.history.push("/dashboard");
-      } else {
-        this.setState({
-          errorMessage: "This stock is already in your dashboard"
-        });
       }
     } catch (err) {
-      console.log(err);
+      this.setState({
+        errorMessage: "This stock is already in your dashboard"
+      });
     }
   };
 
@@ -59,11 +53,10 @@ class AddStock extends React.Component {
     e.preventDefault();
     const url = `https://api.iextrading.com/1.0/stock/${value}/quote`;
     try {
-      const request = await fetch(url);
-      const response = await request.json();
-      const name = response["companyName"];
-      const symbol = response["symbol"];
-      const price = response["close"];
+      const response = await searchSymbol(url);
+      const name = response.data["companyName"];
+      const symbol = response.data["symbol"];
+      const price = response.data["close"];
       this.setState({
         name,
         symbol,

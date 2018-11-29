@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { userLogout } from "../../helpers/api/api";
 
 class Logout extends Component {
   async componentDidMount() {
     try {
-      const request = await fetch("/users/logout", {
-        method: "post",
-        headers: { "Content-Type": "application/json" }
-      });
-      await request.json();
+      await userLogout();
       this.props.toggleLogin();
       this.props.history.push("/");
     } catch (err) {

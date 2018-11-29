@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
-    "axios": "^0.18.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "dotenv": "^6.1.0",
@@ -25,8 +24,6 @@
     "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
     "node-cron": "^2.0.3",
-    "nodemailer": "^4.6.8",
-    "nodemailer-mailgun-transport": "^1.4.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "validator": "^10.8.0"

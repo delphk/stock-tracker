@@ -9,6 +9,11 @@ import {
   Table
 } from "reactstrap";
 import Spinner from "../spinner/Spinner";
+import {
+  getUserInfo,
+  verifyUser,
+  updateEmailAlert
+} from "../../helpers/api/api";
 
 class Settings extends React.Component {
   state = {
@@ -27,12 +32,9 @@ class Settings extends React.Component {
 
   async componentDidMount() {
     try {
-      const request = await fetch("/users", {
-        method: "get"
-      });
-      const response = await request.json();
-      this.setState({ userInfo: response, isLoading: false });
-      if (!response.isVerified) {
+      const response = await getUserInfo();
+      this.setState({ userInfo: response.data, isLoading: false });
+      if (!response.data.isVerified) {
         this.setState({
           verificationMessage:
             "Your email has not been verified. Please verify your email in order to receive email alerts."
@@ -45,12 +47,9 @@ class Settings extends React.Component {
 
   sendVerification = async () => {
     try {
-      const request = await fetch("/users/verify", {
-        method: "post"
-      });
-      const response = await request.json();
-      if (response.msg) {
-        this.setState({ emailSentMessage: response.msg });
+      const response = await verifyUser();
+      if (response) {
+        this.setState({ emailSentMessage: response.data.msg });
         this.toggleModal();
       }
     } catch (err) {
@@ -60,15 +59,10 @@ class Settings extends React.Component {
 
   toggleAlert = async () => {
     try {
-      const request = await fetch("/users", {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          emailAlert: !this.state.userInfo.emailAlert
-        })
+      const response = await updateEmailAlert({
+        emailAlert: !this.state.userInfo.emailAlert
       });
-      const response = await request.json();
-      this.setState({ userInfo: response });
+      this.setState({ userInfo: response.data });
     } catch (err) {
       console.log(err);
     }

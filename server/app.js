@@ -7,17 +7,19 @@ const express = require("express"),
   bodyParser = require("body-parser"),
   morgan = require("morgan"),
   cookieParser = require("cookie-parser"),
+  cors = require("cors"),
   path = require("path");
 
 const app = express();
 
 // Middlewares
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(morgan("dev"));
 app.use(passport.initialize());
+app.use(cookieParser());
 
+app.use(morgan("dev"));
 const staticFiles = express.static(path.join(__dirname, "../client/build"));
 
 if (process.env.NODE_ENV === "production") {

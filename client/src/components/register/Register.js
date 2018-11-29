@@ -9,6 +9,7 @@ import {
   Input
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
+import { registerUser } from "../../helpers/api/api";
 
 class Register extends React.Component {
   state = {
@@ -43,13 +44,8 @@ class Register extends React.Component {
       return this.setState({ errorMessage: "Please enter a valid email" });
     }
     try {
-      const request = await fetch("/users/register", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(this.state)
-      });
-      const response = await request.json();
-      if (response.user) {
+      const response = await registerUser(this.state);
+      if (response.data.user) {
         this.setState({
           errorMessage: "",
           successMessage: "You have successfully registered!"
@@ -58,10 +54,10 @@ class Register extends React.Component {
         setTimeout(() => {
           this.props.history.push("/login");
         }, 3000);
-      } else if (response.message) {
-        if (response.message.match(/username/)) {
+      } else if (response.data.message) {
+        if (response.data.message.match(/username/)) {
           this.setState({ errorMessage: "Username has been taken" });
-        } else if (response.message.match(/email/)) {
+        } else if (response.data.message.match(/email/)) {
           this.setState({
             errorMessage: "An account with this email already exists"
           });

@@ -8,6 +8,7 @@ import {
   Label,
   Input
 } from "reactstrap";
+import axios from "axios";
 
 class Login extends React.Component {
   state = {
@@ -23,19 +24,16 @@ class Login extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
     try {
-      const request = await fetch("/users/login", {
+      const response = await axios({
         method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(this.state)
+        url: "/users/login",
+        data: this.state
       });
-      const response = await request.json();
-      if (response.user) {
+      if (response) {
         this.props.toggleLogin();
-      } else {
-        this.setState({ errorMessage: response.error.message });
       }
     } catch (err) {
-      console.log(err);
+      this.setState({ errorMessage: err.response.data.error.message });
     }
   };
 

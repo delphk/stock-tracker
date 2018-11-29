@@ -13,6 +13,12 @@ import {
 import { Link } from "react-router-dom";
 import Historical from "../historical/Historical";
 import Spinner from "../spinner/Spinner";
+import {
+  getStocks,
+  fetchStockPrices,
+  editStock,
+  deleteStock
+} from "../../helpers/api/api";
 
 class Dashboard extends React.Component {
   state = {
@@ -30,11 +36,8 @@ class Dashboard extends React.Component {
 
   async componentDidMount() {
     try {
-      const request = await fetch("/stocks", {
-        method: "get"
-      });
-      const response = await request.json();
-      this.setState({ stocks: response.stocks });
+      const response = await getStocks();
+      this.setState({ stocks: response.data.stocks });
       if (this.state.stocks.length > 0) {
         this.getStockPrices();
       } else {
@@ -51,13 +54,12 @@ class Dashboard extends React.Component {
       const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
       const symbols = arrayOfSymbols.join(",");
       const url = `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols}&types=quote,chart&range=1m`;
-      const request = await fetch(url);
-      const response = await request.json();
+      const response = await fetchStockPrices(url);
 
       // Get stock prices for each symbol
       const arrayOfStockPrices = [];
       for (let i = 0; i < arrayOfSymbols.length; i++) {
-        const prices = response[arrayOfSymbols[i]]["quote"]["latestPrice"];
+        const prices = response.data[arrayOfSymbols[i]]["quote"]["latestPrice"];
         arrayOfStockPrices.push(prices);
       }
       let stocks = [...this.state.stocks];
@@ -70,11 +72,15 @@ class Dashboard extends React.Component {
       //Get historical data
       const data = [];
       for (let i = 0; i < arrayOfSymbols.length; i++) {
-        for (let j = 0; j < response[arrayOfSymbols[i]]["chart"].length; j++) {
+        for (
+          let j = 0;
+          j < response.data[arrayOfSymbols[i]]["chart"].length;
+          j++
+        ) {
           data.push({
-            date: response[arrayOfSymbols[i]]["chart"][j]["label"],
+            date: response.data[arrayOfSymbols[i]]["chart"][j]["label"],
             [arrayOfSymbols[i]]:
-              response[arrayOfSymbols[i]]["chart"][j]["close"]
+              response.data[arrayOfSymbols[i]]["chart"][j]["close"]
           });
         }
       }
@@ -102,19 +108,13 @@ class Dashboard extends React.Component {
   handleEdit = async (id, index, e) => {
     e.preventDefault();
     try {
-      const request = await fetch(`/stocks/${id}`, {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          targetlow: e.target.newtargetlow.value,
-          targethigh: e.target.newtargethigh.value
-        })
+      const response = await editStock(id, {
+        targetlow: e.target.newtargetlow.value,
+        targethigh: e.target.newtargethigh.value
       });
-      const response = await request.json();
-      console.log(response);
       let stocks = [...this.state.stocks];
-      stocks[index]["targetlow"] = response.stock.targetlow;
-      stocks[index]["targethigh"] = response.stock.targethigh;
+      stocks[index]["targetlow"] = response.data.stock.targetlow;
+      stocks[index]["targethigh"] = response.data.stock.targethigh;
       this.setState({ stocks });
       this.toggleModal();
     } catch (err) {
@@ -124,11 +124,7 @@ class Dashboard extends React.Component {
 
   handleDelete = async (id, index) => {
     try {
-      const request = await fetch(`/stocks/${id}`, {
-        method: "delete",
-        headers: { "Content-Type": "application/json" }
-      });
-      await request.json();
+      await deleteStock(id);
       let stocks = [...this.state.stocks];
       stocks.splice(index, 1);
       this.setState({ stocks });
