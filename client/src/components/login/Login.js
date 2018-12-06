@@ -44,7 +44,7 @@ class Login extends React.Component {
           <Alert color="danger">{this.state.errorMessage}</Alert>
         )}
         <h2>Account Login</h2>
-        <Form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+        <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="username">Username</Label>
             <Input
@@ -52,6 +52,7 @@ class Login extends React.Component {
               type="text"
               name="username"
               value={this.state.username}
+              onChange={this.handleChange}
               placeholder="Enter username"
             />
           </FormGroup>
@@ -62,6 +63,7 @@ class Login extends React.Component {
               type="password"
               name="password"
               value={this.state.password}
+              onChange={this.handleChange}
               placeholder="Enter password"
             />
           </FormGroup>
