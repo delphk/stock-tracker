@@ -19,15 +19,12 @@ passport.use(
     },
     async (payload, done) => {
       try {
-        //Find user specified in token
         const user = await User.findById(payload.userid);
 
-        //if user doesn't exist, handle it
         if (!user) {
           return done(null, false);
         }
 
-        //otherwise, return the user
         done(null, user);
       } catch (error) {
         done(error, false);
