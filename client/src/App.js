@@ -19,16 +19,6 @@ import {
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function PrivateRoute({ component: Component, isLoggedIn }) {
-  return (
-    <Route
-      render={props =>
-        isLoggedIn ? <Component {...props} /> : <Redirect to="/login" />
-      }
-    />
-  );
-}
-
 class App extends Component {
   state = { isLoggedIn: false };
 
@@ -84,21 +74,25 @@ class App extends Component {
               }}
             />
 
-            <PrivateRoute
+            <Route
               path="/settings"
-              component={Settings}
-              isLoggedIn={isLoggedIn}
+              render={() => {
+                return isLoggedIn ? <Settings /> : <Redirect to="/login" />;
+              }}
             />
-            <PrivateRoute
+            <Route
               path="/dashboard"
-              component={Dashboard}
-              isLoggedIn={isLoggedIn}
+              render={() => {
+                return isLoggedIn ? <Dashboard /> : <Redirect to="/login" />;
+              }}
             />
-            <PrivateRoute
+            <Route
               path="/addstock"
-              component={AddStock}
-              isLoggedIn={isLoggedIn}
+              render={() => {
+                return isLoggedIn ? <AddStock /> : <Redirect to="/login" />;
+              }}
             />
+
             <Route
               path="/logout"
               render={() => {
