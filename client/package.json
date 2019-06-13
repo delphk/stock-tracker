@@ -3,18 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.1.3",
+    "antd": "^3.19.3",
+    "babel-plugin-import": "^1.12.0",
+    "bootstrap": "^4.3.1",
+    "customize-cra": "^0.2.13",
     "react": "^16.6.0",
+    "react-app-rewired": "^2.1.3",
     "react-dom": "^16.6.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.0",
+    "react-scripts": "^3.0.1",
     "reactstrap": "^6.5.0",
     "recharts": "^1.3.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -28,7 +32,6 @@
   ],
   "proxy": "http://localhost:3001",
   "devDependencies": {
-    "jest": "^23.6.0",
     "jest-dom": "^2.1.0",
     "react-testing-library": "^5.2.3"
   }
