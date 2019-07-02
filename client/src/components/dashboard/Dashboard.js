@@ -53,8 +53,7 @@ class Dashboard extends React.Component {
     try {
       const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
       const symbols = arrayOfSymbols.join(",");
-      const url = `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols}&types=quote,chart&range=1m`;
-      const response = await fetchStockPrices(url);
+      const response = await fetchStockPrices(symbols);
 
       // Get stock prices for each symbol
       const arrayOfStockPrices = [];
