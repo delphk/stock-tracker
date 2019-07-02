@@ -51,21 +51,26 @@ class AddStock extends React.Component {
 
   getSymbol = async (value, e) => {
     e.preventDefault();
-    const url = `https://api.iextrading.com/1.0/stock/${value}/quote`;
     try {
-      const response = await searchSymbol(url);
-      const name = response.data["companyName"];
-      const symbol = response.data["symbol"];
-      const price = response.data["close"];
+      const response = await searchSymbol(value);
+      if (response.data.message)
+        this.setState({ errorMessage: "No such stock exists :(" });
+      else {
+        const name = response.data["companyName"];
+        const symbol = response.data["symbol"];
+        const price = response.data["close"];
+        this.setState({
+          name,
+          symbol,
+          price,
+          isSymbolValid: true,
+          errorMessage: ""
+        });
+      }
+    } catch (err) {
       this.setState({
-        name,
-        symbol,
-        price,
-        isSymbolValid: true,
-        errorMessage: ""
+        errorMessage: "Something went wrong, please try again later."
       });
-    } catch {
-      this.setState({ errorMessage: "No such stock exists :(" });
     }
   };
 

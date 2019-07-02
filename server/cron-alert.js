@@ -4,6 +4,7 @@ const cron = require("node-cron"),
 
 const Stock = require("./models/stock");
 const User = require("./models/user");
+const iex = require("./api/iex");
 
 const alert = cron.schedule(
   "* * * * 1-5",
@@ -20,8 +21,8 @@ const alert = cron.schedule(
     if (stocks.length > 0) {
       const arrayOfSymbols = stocks.map(stock => stock.symbol);
       const symbols = arrayOfSymbols.join(",");
-      const url = `https://api.iextrading.com/1.0/stock/market/batch?symbols=${symbols}&types=quote`;
-      const response = await axios.get(url);
+      const url = `/market/batch?symbols=${symbols}&types=quote`;
+      const response = await iex.get(url);
 
       const arrayOfStockPrices = [];
       for (let i = 0; i < arrayOfSymbols.length; i++) {

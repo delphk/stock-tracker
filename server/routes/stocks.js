@@ -3,11 +3,25 @@ const router = express.Router();
 const passport = require("passport");
 
 const {
+  getSymbol,
+  getStockPrices,
   getStocks,
   addStock,
   deleteStock,
   editStock
 } = require("../controllers/stock_controller");
+
+router.get(
+  "/symbol/:id",
+  passport.authenticate("jwt", { session: false }),
+  getSymbol
+);
+
+router.get(
+  "/prices/:id",
+  passport.authenticate("jwt", { session: false }),
+  getStockPrices
+);
 
 //Gets stocks saved by user
 router.get("/", passport.authenticate("jwt", { session: false }), getStocks);

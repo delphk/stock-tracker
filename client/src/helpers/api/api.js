@@ -21,7 +21,8 @@ const deleteStock = async id =>
     url: `/stocks/${id}`
   });
 
-const fetchStockPrices = async url => await axios.get(url);
+const fetchStockPrices = async symbols =>
+  await axios.get(`/stocks/prices/${symbols}`);
 
 //Settings APIs
 const getUserInfo = async () => await axios.get("/users");
@@ -43,7 +44,8 @@ const addStock = async payload =>
     data: payload
   });
 
-const searchSymbol = async url => await axios.get(url);
+const searchSymbol = async symbol =>
+  await axios.get(`/stocks/symbol/${symbol}`);
 
 //Logout API
 const userLogout = async () => await axios.post("/users/logout");
