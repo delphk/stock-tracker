@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 const { passport } = require("./passport");
 const alert = require("./cron-alert");
 const express = require("express"),
+  helmet = require("helmet"),
   bodyParser = require("body-parser"),
   morgan = require("morgan"),
   cookieParser = require("cookie-parser"),
@@ -13,6 +14,7 @@ const express = require("express"),
 const app = express();
 
 // Middlewares
+app.use(helmet());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -39,6 +41,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 //Scheduled tasks
-alert.start();
+// alert.start();
 
 module.exports = app;

@@ -1,4 +1,29 @@
+const iex = require("../api/iex");
 const Stock = require("../models/stock");
+
+const getSymbol = async (req, res) => {
+  try {
+    const response = await iex.get(
+      `/${req.params.id}/quote?token=${process.env.IEX_API_KEY}`
+    );
+    res.json(response.data);
+  } catch (err) {
+    res.status(err.status).json(err);
+  }
+};
+
+const getStockPrices = async (req, res) => {
+  try {
+    const response = await iex.get(
+      `/market/batch?symbols=${
+        req.params.id
+      }&types=quote,chart&range=1m&token=${process.env.IEX_API_KEY}`
+    );
+    res.json(response.data);
+  } catch (err) {
+    res.status(err.status).json(err);
+  }
+};
 
 const getStocks = async (req, res) => {
   try {
@@ -23,7 +48,7 @@ const addStock = async (req, res) => {
 
 const deleteStock = async (req, res) => {
   try {
-    const stock = await Stock.findByIdAndDelete(req.params.id);
+    await Stock.findByIdAndDelete(req.params.id);
     res.json({ status: "success" });
   } catch (err) {
     console.log(err);
@@ -42,6 +67,8 @@ const editStock = async (req, res) => {
 };
 
 module.exports = {
+  getSymbol,
+  getStockPrices,
   getStocks,
   addStock,
   deleteStock,
