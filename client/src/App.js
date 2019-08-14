@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import AppNavBar from "./components/navbar/AppNavbar";
 import Login from "./components/login/Login";
 import Register from "./components/register/Register";
@@ -20,7 +21,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends Component {
-  state = { isLoggedIn: false };
+  state = { isLoggedIn: undefined };
 
   toggleLogin = () => {
     this.setState({ isLoggedIn: !this.state.isLoggedIn });
@@ -34,7 +35,7 @@ class App extends Component {
         this.setState({ isLoggedIn: true });
       }
     } catch (err) {
-      console.log(err);
+      this.setState({ isLoggedIn: false });
     }
   }
 
@@ -56,16 +57,11 @@ class App extends Component {
                 );
               }}
             />
-            <Route
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
               exact
               path="/"
-              render={() => {
-                return isLoggedIn ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <Redirect to="/login" />
-                );
-              }}
+              component={Dashboard}
             />
             <Route
               path="/register"
@@ -73,24 +69,20 @@ class App extends Component {
                 return isLoggedIn ? <Redirect to="/dashboard" /> : <Register />;
               }}
             />
-
-            <Route
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
               path="/settings"
-              render={() => {
-                return isLoggedIn ? <Settings /> : <Redirect to="/login" />;
-              }}
+              component={Settings}
             />
-            <Route
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
               path="/dashboard"
-              render={() => {
-                return isLoggedIn ? <Dashboard /> : <Redirect to="/login" />;
-              }}
+              component={Dashboard}
             />
-            <Route
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
               path="/addstock"
-              render={() => {
-                return isLoggedIn ? <AddStock /> : <Redirect to="/login" />;
-              }}
+              component={AddStock}
             />
 
             <Route
