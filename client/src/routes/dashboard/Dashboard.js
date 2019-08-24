@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import Historical from "../historical/Historical";
-import Spinner from "../spinner/Spinner";
+import Spinner from "../../components/spinner/Spinner";
 import {
   getStocks,
   fetchStockPrices,
