@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import "./App.css";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import AppNavBar from "./components/navbar/AppNavbar";
-import Login from "./components/login/Login";
-import Register from "./components/register/Register";
-import AddStock from "./components/addstock/AddStock";
-import Dashboard from "./components/dashboard/Dashboard";
-import Logout from "./components/logout/Logout";
-import NotFound from "./components/notfound/NotFound";
-import Settings from "./components/settings/Settings";
+import Login from "./routes/login/Login";
+import Register from "./routes/register/Register";
+import AddStock from "./routes/addstock/AddStock";
+import Dashboard from "./routes/dashboard/Dashboard";
+import Logout from "./routes/logout/Logout";
+import NotFound from "./routes/notfound/NotFound";
+import Settings from "./routes/settings/Settings";
 import { getStocks } from "./helpers/api/api";
 
 import {

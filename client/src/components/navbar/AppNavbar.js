@@ -38,7 +38,7 @@ class AppNavBar extends Component {
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                {!this.props.isLoggedIn && (
+                {!this.props.isLoggedIn === false && (
                   <React.Fragment>
                     <NavItem>
                       <NavLink

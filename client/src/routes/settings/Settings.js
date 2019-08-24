@@ -8,7 +8,7 @@ import {
   ModalBody,
   Table
 } from "reactstrap";
-import Spinner from "../spinner/Spinner";
+import Spinner from "../../components/spinner/Spinner";
 import {
   getUserInfo,
   verifyUser,
