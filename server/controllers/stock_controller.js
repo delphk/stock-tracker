@@ -8,7 +8,8 @@ const getSymbol = async (req, res) => {
     );
     res.json(response.data);
   } catch (err) {
-    res.status(err.status).json(err);
+    if (err.response.status === 404) res.json({ message: "stock not found" });
+    else res.status(500);
   }
 };
 
