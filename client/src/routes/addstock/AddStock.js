@@ -58,7 +58,7 @@ class AddStock extends React.Component {
       else {
         const name = response.data["companyName"];
         const symbol = response.data["symbol"];
-        const price = response.data["close"];
+        const price = response.data["latestPrice"];
         this.setState({
           name,
           symbol,
