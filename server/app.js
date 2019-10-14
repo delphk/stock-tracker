@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-//Scheduled tasks
-// alert.start();
+// Scheduled tasks
+alert.start();
 
 module.exports = app;

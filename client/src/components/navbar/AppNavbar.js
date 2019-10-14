@@ -24,7 +24,7 @@ class AppNavBar extends Component {
   render() {
     return (
       <div>
-        <Navbar color="secondary" dark expand="sm" className="mb-5">
+        <Navbar color="secondary" dark expand="sm">
           <Container>
             <img
               id="logo"
@@ -33,12 +33,12 @@ class AppNavBar extends Component {
               style={{ width: "40px", height: "40px" }}
             />
             <NavLink id="navbarbrand" to="/">
-              $TOCKer
+              $TOCKER
             </NavLink>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                {!this.props.isLoggedIn === false && (
+                {this.props.isLoggedIn === false && (
                   <React.Fragment>
                     <NavItem>
                       <NavLink

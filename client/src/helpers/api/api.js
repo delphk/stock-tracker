@@ -1,36 +1,46 @@
-import axios from "axios";
+import { apiRequest } from "../../utils/apiRequest";
+
+//Login API
+const loginUser = async payload =>
+  await apiRequest({
+    method: "post",
+    url: "/users/login",
+    data: payload
+  });
+
 //Register API
 const registerUser = async payload =>
-  await axios({
+  await apiRequest({
     method: "post",
     url: "/users/register",
     data: payload
   });
 
 //Dashboard APIs
-const getStocks = async () => await axios.get("/stocks");
+const getStocks = async () => await apiRequest({ url: "/stocks" });
 const editStock = async (id, payload) =>
-  await axios({
+  await apiRequest({
     method: "put",
     url: `/stocks/${id}`,
     data: payload
   });
 const deleteStock = async id =>
-  await axios({
+  await apiRequest({
     method: "delete",
     url: `/stocks/${id}`
   });
 
 const fetchStockPrices = async symbols =>
-  await axios.get(`/stocks/prices/${symbols}`);
+  await apiRequest({ url: `/stocks/prices/${symbols}` });
 
 //Settings APIs
-const getUserInfo = async () => await axios.get("/users");
+const getUserInfo = async () => await apiRequest({ url: "/users" });
 
-const verifyUser = async () => await axios.post("/users/verify");
+const verifyUser = async () =>
+  await apiRequest({ method: "post", url: "/users/verify" });
 
 const updateEmailAlert = async payload =>
-  await axios({
+  await apiRequest({
     method: "put",
     url: "/users",
     data: payload
@@ -38,19 +48,21 @@ const updateEmailAlert = async payload =>
 
 //AddStock APIs
 const addStock = async payload =>
-  await axios({
+  await apiRequest({
     method: "post",
     url: "/stocks",
     data: payload
   });
 
 const searchSymbol = async symbol =>
-  await axios.get(`/stocks/symbol/${symbol}`);
+  await apiRequest({ url: `/stocks/symbol/${symbol}` });
 
 //Logout API
-const userLogout = async () => await axios.post("/users/logout");
+const userLogout = async () =>
+  await apiRequest({ method: "post", url: "/users/logout" });
 
 export {
+  loginUser,
   registerUser,
   getStocks,
   fetchStockPrices,

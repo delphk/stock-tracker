@@ -1,18 +1,10 @@
 import React from "react";
-import {
-  Table,
-  Container,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Label,
-  Input
-} from "reactstrap";
+import { Container } from "reactstrap";
+import { Table, Divider, Empty, Form, Button } from "antd";
 import { Link } from "react-router-dom";
 import Historical from "../historical/Historical";
 import Spinner from "../../components/spinner/Spinner";
+import CollectionCreateForm from "../../components/FormInModal";
 import {
   getStocks,
   fetchStockPrices,
@@ -23,15 +15,9 @@ import {
 class Dashboard extends React.Component {
   state = {
     stocks: [],
-    modalIndex: undefined,
+    modalVisible: false,
     data: [],
     isLoading: true
-  };
-
-  toggleModal = index => {
-    this.setState({
-      modalIndex: index
-    });
   };
 
   async componentDidMount() {
@@ -68,7 +54,7 @@ class Dashboard extends React.Component {
         isLoading: false
       });
 
-      //Get historical data
+      // Get historical data
       const data = [];
       for (let i = 0; i < arrayOfSymbols.length; i++) {
         for (
@@ -104,21 +90,26 @@ class Dashboard extends React.Component {
     return "$" + price.toFixed(2);
   };
 
-  handleEdit = async (id, index, e) => {
-    e.preventDefault();
-    try {
-      const response = await editStock(id, {
-        targetlow: e.target.newtargetlow.value,
-        targethigh: e.target.newtargethigh.value
-      });
-      let stocks = [...this.state.stocks];
-      stocks[index]["targetlow"] = response.data.stock.targetlow;
-      stocks[index]["targethigh"] = response.data.stock.targethigh;
-      this.setState({ stocks });
-      this.toggleModal();
-    } catch (err) {
-      console.log(err);
-    }
+  handleEdit = () => {
+    const { form } = this.formRef.props;
+    const { id, index } = this.state.stockToEdit;
+    this.setState({
+      confirmLoading: true
+    });
+    form.validateFields(async (err, value) => {
+      try {
+        const response = await editStock(id, {
+          targetlow: value.newtargetlow,
+          targethigh: value.newtargethigh
+        });
+        let stocks = [...this.state.stocks];
+        stocks[index]["targetlow"] = response.data.stock.targetlow;
+        stocks[index]["targethigh"] = response.data.stock.targethigh;
+        this.setState({ stocks, confirmLoading: false, modalVisible: false });
+      } catch (err) {
+        this.setState({ confirmLoading: false, modalVisible: false });
+      }
+    });
   };
 
   handleDelete = async (id, index) => {
@@ -132,97 +123,109 @@ class Dashboard extends React.Component {
     }
   };
 
+  showModal = (id, index) => {
+    this.setState({
+      modalVisible: true,
+      stockToEdit: { id, index }
+    });
+  };
+
+  handleModalCancel = () => {
+    this.setState({
+      modalVisible: false
+    });
+  };
+
+  saveFormRef = formRef => {
+    this.formRef = formRef;
+  };
+
   render() {
+    const columns = [
+      {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+        render: (text, record) => (
+          <div>
+            <p>{text}</p>
+            <p className="table-subheader">({record.symbol})</p>
+          </div>
+        )
+      },
+      {
+        title: "Current Price",
+        dataIndex: "price",
+        key: "price",
+        render: text => this.formatStockPrice(text)
+      },
+      {
+        title: "Target low",
+        dataIndex: "targetlow",
+        key: "targetlow",
+        render: text => (text ? this.formatStockPrice(text) : "-")
+      },
+      {
+        title: "Target high",
+        dataIndex: "targethigh",
+        key: "targethigh",
+        render: text => (text ? this.formatStockPrice(text) : "-")
+      },
+      {
+        title: "Action",
+        key: "action",
+        render: (text, record, index) => (
+          <span>
+            <Button
+              type="link"
+              onClick={() => this.showModal(record._id, index)}
+            >
+              Edit
+            </Button>
+            <Divider type="vertical" style={{ background: "#243B53" }} />
+            <Button
+              type="link"
+              onClick={() => this.handleDelete(record._id, index)}
+            >
+              Delete
+            </Button>
+          </span>
+        )
+      }
+    ];
     return (
       <React.Fragment>
         {this.state.isLoading && <Spinner />}
         {!this.state.isLoading && (
           <Container>
-            <h2 id="heading">Dashboard</h2>
+            <h3 id="heading">Dashboard</h3>
             {this.state.stocks.length === 0 && (
-              <h5>
-                Click <Link to="/addstock">here</Link> to add stocks to your
-                watchlist!
-              </h5>
+              <Empty
+                description={
+                  <h6>
+                    Click <Link to="/addstock">here</Link> to add stocks to your
+                    watchlist!
+                  </h6>
+                }
+              />
             )}
             {this.state.stocks.length > 0 && (
-              <React.Fragment>
-                <Table striped responsive>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Stock name</th>
-                      <th>Symbol</th>
-                      <th>Current price</th>
-                      <th>Target low price</th>
-                      <th>Target high price</th>
-                      <th>Edit/ Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.stocks.map((stock, index) => {
-                      return (
-                        <tr key={index}>
-                          <Modal
-                            isOpen={this.state.modalIndex === index}
-                            toggle={this.toggleModal}
-                          >
-                            <ModalHeader toggle={this.toggleModal}>
-                              Edit Target Price
-                            </ModalHeader>
-                            <form
-                              onSubmit={e =>
-                                this.handleEdit(stock._id, index, e)
-                              }
-                            >
-                              <ModalBody>
-                                <Label>Target Low:</Label>{" "}
-                                <Input name="newtargetlow" type="number" />
-                                <Label>Target High:</Label>{" "}
-                                <Input name="newtargethigh" type="number" />
-                              </ModalBody>
-                              <ModalFooter>
-                                <Button color="secondary">Edit</Button>
-                              </ModalFooter>
-                            </form>
-                          </Modal>
-                          <th scope="row">{index + 1}</th>
-                          <td>{stock.name}</td>
-                          <td>{stock.symbol}</td>
-                          <td>
-                            {stock.price
-                              ? this.formatStockPrice(stock.price)
-                              : ""}
-                          </td>
-                          <td>
-                            {stock.targetlow
-                              ? this.formatStockPrice(stock.targetlow)
-                              : "-"}
-                          </td>
-                          <td>
-                            {stock.targethigh
-                              ? this.formatStockPrice(stock.targethigh)
-                              : "-"}
-                          </td>
-                          <td>
-                            <i
-                              className="fa fa-edit fa-lg"
-                              onClick={() => this.toggleModal(index)}
-                            />
-                            <i
-                              className="fa fa-trash fa-lg"
-                              onClick={() =>
-                                this.handleDelete(stock._id, index)
-                              }
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </Table>
+              <div>
+                <Table
+                  columns={columns}
+                  dataSource={this.state.stocks}
+                  scroll={{ x: 480 }}
+                  pagination={{ defaultPageSize: 5 }}
+                />
+                <CollectionCreateForm
+                  wrappedComponentRef={this.saveFormRef}
+                  modalVisible={this.state.modalVisible}
+                  handleModalCancel={this.handleModalCancel}
+                  handleEdit={this.handleEdit}
+                  confirmLoading={this.state.confirmLoading}
+                />
                 <Historical data={this.state.data} />
-              </React.Fragment>
+              </div>
             )}
           </Container>
         )}
@@ -231,4 +234,5 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+const DashboardScreen = Form.create({ name: "form_in_modal" })(Dashboard);
+export default DashboardScreen;

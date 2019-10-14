@@ -7,7 +7,7 @@ const User = require("./models/user");
 const iex = require("./api/iex");
 
 const alert = cron.schedule(
-  "* * * * 1-5",
+  "*/3 * * * 1-5",
   async () => {
     const stocks = await Stock.find({
       $or: [

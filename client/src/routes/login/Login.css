@@ -1,0 +1,23 @@
+.custom-form {
+  background: white;
+  padding: 50px 60px;
+  border-radius: 1.5%;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-icon {
+  color: rgba(73, 34, 34, 0.25);
+}
+
+.signup-button {
+  margin-top: 24px;
+  width: 100%;
+  background: #bcccdc;
+  color: #102a43;
+}
+
+.signup-button:hover {
+  background: #9fb3c8;
+  color: #102a43;
+  border: #829ab1;
+}

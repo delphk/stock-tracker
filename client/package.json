@@ -36,5 +36,8 @@
   "devDependencies": {
     "jest-dom": "^2.1.0",
     "react-testing-library": "^5.2.3"
+  },
+  "jest": {
+    "timers": "fake"
   }
 }
