@@ -1,5 +1,6 @@
 const iex = require("../api/iex");
 const Stock = require("../models/stock");
+const { cache, getUrlFromRequest } = require("../middlewares/cache");
 
 const getSymbol = async (req, res) => {
   try {
@@ -20,9 +21,11 @@ const getStockPrices = async (req, res) => {
         req.params.id
       }&types=quote,chart&range=1m&token=${process.env.IEX_API_KEY}`
     );
+    const url = getUrlFromRequest(req);
+    cache.set(url, response.data);
     res.json(response.data);
   } catch (err) {
-    res.status(err.status).json(err);
+    res.status(500);
   }
 };
 

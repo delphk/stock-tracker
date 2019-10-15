@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const cache = require("../middlewares/cache");
 
 const {
   getSymbol,
@@ -20,6 +21,7 @@ router.get(
 router.get(
   "/prices/:id",
   passport.authenticate("jwt", { session: false }),
+  cache.get,
   getStockPrices
 );
 

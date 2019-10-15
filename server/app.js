@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").load();
 }
-const { passport } = require("./passport");
+const { passport } = require("./middlewares/passport");
 const alert = require("./cron-alert");
 const express = require("express"),
   helmet = require("helmet"),
