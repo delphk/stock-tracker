@@ -7,7 +7,6 @@ import {
   verifyUser,
   updateEmailAlert
 } from "../../helpers/api/api";
-// import Container from "../../components/Container/Container";
 const { Text } = Typography;
 class Settings extends React.Component {
   state = {
