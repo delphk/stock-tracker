@@ -1,51 +1,35 @@
 import React from "react";
-import { render, fireEvent } from "react-testing-library";
-import Login from "./Login";
+import { fireEvent } from "react-testing-library";
+import { renderWithRouter } from "../../utils/setUpTests";
+import LoginForm from "./Login";
+
+const props = {
+  toggleLogin: jest.fn()
+};
 
 describe("Renders on page", () => {
   test("should render login heading", () => {
-    const { container } = render(<Login />);
-
-    const title = container.querySelector("h2");
+    const { container } = renderWithRouter(<LoginForm {...props} />);
+    const title = container.querySelector("h3");
 
     expect(title).toBeInTheDocument();
-    expect(title).toHaveTextContent("Login");
-  });
-
-  test("should render label and input fields for username", () => {
-    const { getByLabelText, getByPlaceholderText } = render(<Login />);
-
-    const label = getByLabelText("Username");
-    const input = getByPlaceholderText("Enter username");
-    expect(label).toBeInTheDocument();
-    expect(input).toBeInTheDocument();
-  });
-
-  test("should render label and input fields for password", () => {
-    const { getByLabelText, getByPlaceholderText } = render(<Login />);
-
-    const label = getByLabelText("Password");
-    const input = getByPlaceholderText("Enter password");
-
-    expect(label).toBeInTheDocument();
-    expect(input).toBeInTheDocument();
+    expect(title).toHaveTextContent("Log in to your account");
   });
 
   test("should render a button to submit request", () => {
-    const { container } = render(<Login />);
-
-    const button = container.querySelector("button");
+    const { container } = renderWithRouter(<LoginForm {...props} />);
+    const button = container.querySelector(".form-button");
 
     expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent("Submit");
+    expect(button).toHaveTextContent("Log in");
   });
 });
 
 describe("Form functionality", () => {
   test("username field contains input name", () => {
     const username = "jane";
-    const { getByPlaceholderText } = render(<Login />);
-    const input = getByPlaceholderText("Enter username");
+    const { getByPlaceholderText } = renderWithRouter(<LoginForm {...props} />);
+    const input = getByPlaceholderText("Username");
 
     fireEvent.change(input, { target: { value: username } });
 
@@ -53,7 +37,7 @@ describe("Form functionality", () => {
   });
 
   test("password field contains input password", () => {
-    const { container } = render(<Login />);
+    const { container } = renderWithRouter(<LoginForm {...props} />);
     const input = container.querySelector(`input[name="password"]`);
     const password = "jane";
     fireEvent.change(input, {
@@ -62,28 +46,17 @@ describe("Form functionality", () => {
     expect(input.value).toBe(password);
   });
 
-  test("submit button will invoke a function", () => {
-    const handleSubmit = jest.fn();
-    const { container } = render(<Login />);
-    const button = container.querySelector("button");
-    button.onclick = handleSubmit;
-    fireEvent.click(button);
-    expect(handleSubmit).toHaveBeenCalledTimes(1);
-  });
-
-  test("successful login redirects", () => {
-    const { container } = render(<Login />);
-    const handleSubmit = jest.fn();
+  test("successful login redirects", async () => {
+    const { container } = renderWithRouter(<LoginForm {...props} />);
     const inputFieldUsername = container.querySelector(
       `input[name="username"]`
     );
     const inputFieldPassword = container.querySelector(
       `input[name="password"]`
     );
-    const button = container.querySelector("button");
-    button.onclick = handleSubmit;
-    const username = "jane";
-    const password = "jane123";
+    const button = container.querySelector(".form-button");
+    const username = "john";
+    const password = "john12345";
     fireEvent.change(inputFieldUsername, {
       target: { value: username }
     });
@@ -91,7 +64,9 @@ describe("Form functionality", () => {
       target: { value: password }
     });
     fireEvent.click(button);
-    const { updatedContainer } = render(<Login />);
+    jest.runAllTimers();
+
+    const { updatedContainer } = renderWithRouter(<LoginForm {...props} />);
     expect(updatedContainer).toBeUndefined();
   });
 });

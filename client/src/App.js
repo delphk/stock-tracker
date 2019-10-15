@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import "./App.css";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import AppNavBar from "./components/navbar/AppNavbar";
-import Login from "./routes/login/Login";
-import Register from "./routes/register/Register";
+import LoginForm from "./routes/login/Login";
+import RegistrationForm from "./routes/register/Register";
 import AddStock from "./routes/addstock/AddStock";
 import Dashboard from "./routes/dashboard/Dashboard";
 import Logout from "./routes/logout/Logout";
@@ -19,6 +18,7 @@ import {
 } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
 class App extends Component {
   state = { isLoggedIn: undefined };
@@ -53,7 +53,7 @@ class App extends Component {
                 return isLoggedIn ? (
                   <Redirect to="/dashboard" />
                 ) : (
-                  <Login toggleLogin={this.toggleLogin} />
+                  <LoginForm toggleLogin={this.toggleLogin} />
                 );
               }}
             />
@@ -66,7 +66,11 @@ class App extends Component {
             <Route
               path="/register"
               render={() => {
-                return isLoggedIn ? <Redirect to="/dashboard" /> : <Register />;
+                return isLoggedIn ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <RegistrationForm />
+                );
               }}
             />
             <AuthenticatedRoute

@@ -1,14 +1,12 @@
 import React from "react";
-import spinner from "../../assets/spinner.gif";
+import { Spin, Icon } from "antd";
 
 export default () => {
   return (
-    <div>
-      <img
-        src={spinner}
-        alt="Loading..."
-        style={{ width: "200px", margin: " 40px auto", display: "block" }}
-      />
-    </div>
+    <Spin
+      data-testid="spinner"
+      style={{ margin: "60px auto", display: "block" }}
+      indicator={<Icon type="loading" style={{ fontSize: 48 }} spin />}
+    />
   );
 };

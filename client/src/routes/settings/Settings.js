@@ -1,33 +1,20 @@
 import React from "react";
-import {
-  Alert,
-  Container,
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Table
-} from "reactstrap";
+import { Container } from "reactstrap";
+import { Alert, Button, Switch, Modal, Row, Col, Icon, Typography } from "antd";
 import Spinner from "../../components/spinner/Spinner";
 import {
   getUserInfo,
   verifyUser,
   updateEmailAlert
 } from "../../helpers/api/api";
-
+// import Container from "../../components/Container/Container";
+const { Text } = Typography;
 class Settings extends React.Component {
   state = {
     userInfo: [],
-    modal: false,
     verificationMessage: "",
     emailSentMessage: "",
     isLoading: true
-  };
-
-  toggleModal = () => {
-    this.setState({
-      modal: !this.state.modal
-    });
   };
 
   async componentDidMount() {
@@ -50,7 +37,7 @@ class Settings extends React.Component {
       const response = await verifyUser();
       if (response) {
         this.setState({ emailSentMessage: response.data.msg });
-        this.toggleModal();
+        this.modalEmailSuccess();
       }
     } catch (err) {
       console.log(err);
@@ -68,86 +55,91 @@ class Settings extends React.Component {
     }
   };
 
+  renderVerificationMessage = message => (
+    <div className="responsive-flex">
+      <span>{message}</span>
+      <Button onClick={this.sendVerification}>Send verification email</Button>
+    </div>
+  );
+
+  modalEmailSuccess = () => {
+    Modal.success({
+      title: "Email Sent!",
+      content: this.state.emailSentMessage
+    });
+  };
+
   render() {
+    const { isLoading, verificationMessage, userInfo } = this.state;
     return (
       <React.Fragment>
-        {this.state.isLoading && <Spinner />}
-        {!this.state.isLoading && (
-          <Container>
-            {this.state.verificationMessage && (
-              <Alert color="danger">
-                {this.state.verificationMessage}{" "}
-                <Button
-                  className="secondary m-2"
-                  size="sm"
-                  onClick={this.sendVerification}
-                >
-                  Send verification email
-                </Button>
-                <Modal
-                  isOpen={this.state.modal}
-                  toggle={this.toggleModal}
-                  className={this.props.className}
-                >
-                  <ModalHeader toggle={this.toggleModal}>
-                    Email Sent!
-                  </ModalHeader>
-                  <ModalBody>{this.state.emailSentMessage}</ModalBody>
-                </Modal>
-              </Alert>
+        {isLoading && <Spinner />}
+        {!isLoading && (
+          <Container style={{ paddingTop: "1%" }}>
+            {verificationMessage && (
+              <Alert
+                message={this.renderVerificationMessage(verificationMessage)}
+                type="error"
+                showIcon
+              />
             )}
-            <h2 id="heading">User Info</h2>
-
-            <Table borderless>
-              <tbody>
-                <tr>
-                  <th scope="row">Name:</th>
-                  <td>{this.state.userInfo.name}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Username:</th>
-                  <td>{this.state.userInfo.username}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Email:</th>
-                  <td>
-                    {this.state.userInfo.email}{" "}
-                    {this.state.userInfo.isVerified ? (
-                      <span id="verified">
-                        <em>Verified</em>
-                      </span>
-                    ) : (
-                      <span id="unverified">
-                        <em>Unverified</em>
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-
-            <h2 id="heading">Preferences</h2>
-            <Table borderless>
-              <tbody>
-                <tr>
-                  <th scope="row">Email Price Alerts:</th>
-                  <td>
-                    {" "}
-                    <span className="toggle-switch">
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          disabled={!this.state.userInfo.isVerified}
-                          checked={this.state.userInfo.emailAlert}
-                          onClick={this.toggleAlert}
-                        />
-                        <span className="slider round" />
-                      </label>
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
+            <h2 id="heading">Account Settings</h2>
+            <Row>
+              <Col sm={24} md={8} lg={8} xl={8}>
+                <p className="subheader">Profile</p>
+              </Col>
+              <Col sm={24} md={12} lg={16} xl={16}>
+                <Row className="pd-btm">
+                  <Col span={8}>
+                    <Text strong>Name:</Text>
+                  </Col>
+                  <Col>{userInfo.name}</Col>
+                </Row>
+                <Row className="pd-btm">
+                  <Col span={8}>
+                    <Text strong>Username:</Text>
+                  </Col>
+                  <Col>{userInfo.username}</Col>
+                </Row>
+                <Row>
+                  <Col span={8}>
+                    <Text strong>Email:</Text>
+                  </Col>
+                  <Col offset={8}>
+                    <div>
+                      <span className="custom-field">{userInfo.email}</span>
+                      {userInfo.isVerified ? (
+                        <span id="verified">
+                          Verified <Icon type="check-circle" />
+                        </span>
+                      ) : (
+                        <span id="unverified">
+                          Unverified <Icon type="close-circle" />
+                        </span>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <hr />
+            <Row>
+              <Col sm={24} md={8} lg={8} xl={8}>
+                <p className="subheader">Preferences</p>
+              </Col>
+              <Col sm={24} md={8} lg={8} xl={8}>
+                <Row className="pd-btm">
+                  <Col className="pd-btm">Email Alerts:</Col>
+                  <Col>
+                    <Switch
+                      disabled={!userInfo.isVerified}
+                      checked={userInfo.emailAlert}
+                      onClick={this.toggleAlert}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
           </Container>
         )}
       </React.Fragment>

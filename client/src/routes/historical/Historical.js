@@ -30,7 +30,7 @@ class Historical extends Component {
     return (
       this.props.data.length > 0 && (
         <div>
-          <h2 id="heading">Historical Chart</h2>
+          <h3 id="heading">Historical Chart</h3>
           <ResponsiveContainer width="80%" height={400}>
             <LineChart data={this.props.data}>
               <CartesianGrid strokeDasharray="3 3" />

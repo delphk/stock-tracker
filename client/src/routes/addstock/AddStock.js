@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Alert,
-  Container,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input
-} from "reactstrap";
+import { Alert, Button, Input, Form, Row, Col } from "antd";
 import { withRouter } from "react-router-dom";
 import { addStock, searchSymbol } from "../../helpers/api/api";
 
@@ -76,62 +68,95 @@ class AddStock extends React.Component {
 
   render() {
     return (
-      <Container>
-        {this.state.errorMessage && (
-          <Alert color="danger">{this.state.errorMessage}</Alert>
-        )}
-        <h2 id="heading">Add Stocks</h2>
+      <div className="form-container">
+        <div className="responsive-container">
+          {this.state.errorMessage && (
+            <Alert message={this.state.errorMessage} type="error" showIcon />
+          )}
+          <h2 id="heading">Add Stocks</h2>
 
-        {this.state.isSymbolValid === false && (
-          <Form onSubmit={e => this.getSymbol(this.state.symbol, e)}>
-            <FormGroup>
-              <Label for="symbol">Symbol</Label>
-              <Input
-                id="shortinput"
-                type="text"
-                name="symbol"
-                value={this.state.symbol}
-                onChange={this.handleChange}
-                placeholder="Enter symbol"
-              />
-              <Button className="mt-3">Search</Button>
-            </FormGroup>
-          </Form>
-        )}
-
-        {this.state.isSymbolValid && (
-          <div>
-            <p>Symbol: {this.state.symbol}</p>
-            <p>Name: {this.state.name}</p>
-            <p>Current price: ${this.state.price}</p>
-            <Form onSubmit={this.handleSubmit}>
-              <FormGroup>
-                <Label for="targetlow">Target Low:</Label>
+          {this.state.isSymbolValid === false && (
+            <Form
+              onSubmit={e => this.getSymbol(this.state.symbol, e)}
+              layout="vertical"
+            >
+              <Form.Item label="Symbol">
                 <Input
-                  id="shortinput"
-                  type="number"
-                  name="targetlow"
-                  value={this.state.targetlow}
+                  type="text"
+                  name="symbol"
+                  size="large"
+                  value={this.state.symbol}
                   onChange={this.handleChange}
+                  placeholder="Enter symbol"
                 />
-              </FormGroup>
-
-              <FormGroup>
-                <Label for="targethigh">Target High:</Label>
-                <Input
-                  id="shortinput"
-                  type="number"
-                  name="targethigh"
-                  value={this.state.targethigh}
-                  onChange={this.handleChange}
-                />
-              </FormGroup>
-              <Button id="button">Submit</Button>
-              <Button onClick={this.resetState}>Reset</Button>
+              </Form.Item>
+              <Button
+                type="primary"
+                size="large"
+                className="form-button"
+                htmlType="submit"
+              >
+                Search
+              </Button>
             </Form>
-          </div>
-        )}
-      </Container>
+          )}
+
+          {this.state.isSymbolValid && (
+            <div>
+              <Row>
+                <Col span={12}>
+                  <p className="label">Name</p>
+                  <p className="statistic">{this.state.name}</p>
+                  <p className="subtext">({this.state.symbol})</p>
+                </Col>
+                <Col span={12}>
+                  <p className="label">Current Price</p>
+                  <p className="statistic">${this.state.price}</p>
+                </Col>
+              </Row>
+              <Form onSubmit={this.handleSubmit} layout="vertical">
+                <Form.Item label="Target Low:">
+                  <Input
+                    type="number"
+                    size="large"
+                    name="targetlow"
+                    value={this.state.targetlow}
+                    onChange={this.handleChange}
+                  />
+                </Form.Item>
+                <Form.Item label="Target High:">
+                  <Input
+                    type="number"
+                    size="large"
+                    name="targethigh"
+                    value={this.state.targethigh}
+                    onChange={this.handleChange}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    size="large"
+                    className="form-button"
+                    htmlType="submit"
+                  >
+                    Submit
+                  </Button>
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    size="large"
+                    className="form-button"
+                    onClick={this.resetState}
+                  >
+                    Reset
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
+          )}
+        </div>
+      </div>
     );
   }
 }

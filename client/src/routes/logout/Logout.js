@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { userLogout } from "../../helpers/api/api";
+import Spinner from "../../components/spinner/Spinner";
 
 class Logout extends Component {
   async componentDidMount() {
@@ -14,7 +15,7 @@ class Logout extends Component {
   }
 
   render() {
-    return <div style={{ textAlign: "center" }}>Logged out!</div>;
+    return <Spinner />;
   }
 }
 

@@ -3,9 +3,9 @@ import Settings from "./Settings";
 import { render } from "react-testing-library";
 
 it("should render spinner", () => {
-  const { getByAltText } = render(<Settings />);
+  const { getByTestId } = render(<Settings />);
 
-  const spinner = getByAltText("Loading...");
+  const spinner = getByTestId("spinner");
 
   expect(spinner).toBeInTheDocument();
 });
