@@ -1,5 +1,4 @@
 const cron = require("node-cron"),
-  axios = require("axios"),
   sgMail = require("./utils/sendgrid");
 
 const Stock = require("./models/stock");
@@ -21,14 +20,13 @@ const alert = cron.schedule(
     if (stocks.length > 0) {
       const arrayOfSymbols = stocks.map(stock => stock.symbol);
       const symbols = arrayOfSymbols.join(",");
-      const url = `/market/batch?symbols=${symbols}&types=quote`;
+      const url = `/market/batch?symbols=${symbols}&types=quote&token=${
+        process.env.IEX_API_KEY
+      }`;
       const response = await iex.get(url);
-
-      const arrayOfStockPrices = [];
-      for (let i = 0; i < arrayOfSymbols.length; i++) {
-        const prices = response.data[arrayOfSymbols[i]]["quote"]["latestPrice"];
-        arrayOfStockPrices.push(prices);
-      }
+      const arrayOfStockPrices = arrayOfSymbols.map(
+        symbol => response.data[symbol]["quote"]["latestPrice"]
+      );
 
       for (let i = 0; i < stocks.length; i++) {
         if (

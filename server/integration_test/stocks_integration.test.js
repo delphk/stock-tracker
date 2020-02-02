@@ -1,6 +1,7 @@
 process.env.NODE_ENV = "integration";
 
 const { setup, teardown } = require("../test_helpers/in_memory_mongodb_server");
+const { signupAsMockUser, loginAsMockUser } = require("../test_helpers");
 const request = require("supertest");
 const app = require("../app");
 
@@ -21,22 +22,9 @@ let mockStock = {
   targethigh: 300
 };
 
-const signupAsMockUser = async () => {
-  const response = await request(app)
-    .post("/users/register")
-    .send(mockUser);
-
-  expect(response.status).toBe(200);
-};
-
-const loginAsMockUser = async agent => {
-  const response = await agent
-    .post("/users/login")
-    .send({ username: mockUser.username, password: mockUser.password });
-  expect(response.status).toBe(200);
-};
-
 describe("Stock Controller", () => {
+  let stockId;
+
   test("Cannot add stocks when not logged in", async () => {
     const response = await request(app)
       .post("/stocks")
@@ -52,23 +40,32 @@ describe("Stock Controller", () => {
   });
 
   beforeAll(async () => {
-    await signupAsMockUser();
+    await signupAsMockUser(mockUser);
   });
 
   test("Able to add stock when logged in", async () => {
     const agent = request.agent(app);
-    await loginAsMockUser(agent);
+    await loginAsMockUser(agent, mockUser);
     const response = await agent.post("/stocks").send(mockStock);
 
     expect(response.status).toBe(201);
     expect(response.body.status).toBe("success");
   });
 
+  test("Cannot add stock when required fields are missing", async () => {
+    const agent = request.agent(app);
+    await loginAsMockUser(agent, mockUser);
+    const response = await agent.post("/stocks").send({ name: "GOOGLE" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toContain("Stock validation failed");
+  });
+
   test("Able to get stock when logged in", async () => {
     const agent = request.agent(app);
-    await loginAsMockUser(agent);
+    await loginAsMockUser(agent, mockUser);
     const response = await agent.get("/stocks");
-
+    stockId = response.body.stocks[0]._id;
     expect(response.status).toBe(200);
     expect(response.body.stocks).toEqual(
       expect.arrayContaining([
@@ -80,5 +77,33 @@ describe("Stock Controller", () => {
         })
       ])
     );
+  });
+
+  test("Able to edit stock price", async () => {
+    const agent = request.agent(app);
+    await loginAsMockUser(agent, mockUser);
+    const newTargetLow = 200;
+    const response = await agent
+      .put(`/stocks/${stockId}`)
+      .send({ targetlow: newTargetLow });
+
+    expect(response.status).toBe(200);
+    expect(response.body.stock).toEqual(
+      expect.objectContaining({
+        name: mockStock.name,
+        symbol: mockStock.symbol,
+        targethigh: mockStock.targethigh,
+        targetlow: newTargetLow
+      })
+    );
+  });
+
+  test("Able to delete stock", async () => {
+    const agent = request.agent(app);
+    await loginAsMockUser(agent, mockUser);
+    const response = await agent.delete(`/stocks/${stockId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe("success");
   });
 });

@@ -24,7 +24,8 @@ const userSchema = new Schema({
     required: [true, "is required"],
     validate: [isEmail, "invalid email"]
   },
-  name: { type: String, required: [true, "is required"] }
+  name: { type: String, required: [true, "is required"] },
+  created: { type: Date, default: Date.now() }
 });
 
 function hashPassword(password, salt) {
