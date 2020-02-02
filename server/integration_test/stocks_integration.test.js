@@ -52,6 +52,15 @@ describe("Stock Controller", () => {
     expect(response.body.status).toBe("success");
   });
 
+  test("Cannot add stock when required fields are missing", async () => {
+    const agent = request.agent(app);
+    await loginAsMockUser(agent, mockUser);
+    const response = await agent.post("/stocks").send({ name: "GOOGLE" });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toContain("Stock validation failed");
+  });
+
   test("Able to get stock when logged in", async () => {
     const agent = request.agent(app);
     await loginAsMockUser(agent, mockUser);

@@ -4,6 +4,7 @@ const { setup, teardown } = require("../test_helpers/in_memory_mongodb_server");
 const request = require("supertest");
 const app = require("../app");
 const User = require("../models/user");
+const Token = require("../models/token");
 
 beforeAll(setup);
 afterAll(teardown);
@@ -22,7 +23,6 @@ describe("New user signup", () => {
     const response = await request(app)
       .post("/users/register")
       .send({ username, name, email, password });
-
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ user: { username, email } });
   });
@@ -65,5 +65,51 @@ describe("New user signup", () => {
     expect(response.body).toEqual({
       message: "User validation failed: name: is required"
     });
+  });
+});
+
+describe("user confirmation routes", () => {
+  it("should not verify if token is invalid", async () => {
+    const fakeToken = "123456faketoken";
+    let response = await request(app).get(`/users/confirmation/${fakeToken}`);
+    expect(response.status).toEqual(400);
+    expect(response.body.msg).toEqual(
+      "We were unable to find a valid token. Your token may have expired."
+    );
+  });
+
+  it("should verify user if token is valid", async () => {
+    const user = await User.findOne({ username: mockUser.username });
+    const tokenString = "validToken123456";
+    const token = new Token({
+      userId: user._id,
+      token: tokenString
+    });
+    await token.save();
+
+    let response = await request(app).get(`/users/confirmation/${tokenString}`);
+    expect(response.status).toEqual(200);
+    expect(response.text).toEqual(
+      "Your account has been verified. Please log in."
+    );
+  });
+
+  it("should not verify if user is invalid", async () => {
+    const user = await User.findOne({ username: mockUser.username });
+
+    const tokenString = "anotherValidToken123456";
+    const token = new Token({
+      userId: user._id,
+      token: tokenString
+    });
+    await token.save();
+
+    await User.findByIdAndDelete(user._id);
+
+    let response = await request(app).get(`/users/confirmation/${tokenString}`);
+    expect(response.status).toEqual(400);
+    expect(response.body.msg).toEqual(
+      "We were unable to find a user for this token."
+    );
   });
 });
