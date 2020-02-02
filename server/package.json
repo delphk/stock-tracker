@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "cross-env NODE_ENV=local nodemon server.js",
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest",
     "test:watch": "npm run test --watch",
-    "test:coverage": "npm run test --coverage"
+    "test:coverage": "NODE_ENV=test jest --coverage"
   },
   "keywords": [],
   "author": "",

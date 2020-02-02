@@ -8,7 +8,7 @@ server/node_modules
 .pnp.js
 
 # testing
-client/coverage
+*/coverage
 
 # production
 client/build

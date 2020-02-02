@@ -1,39 +1,24 @@
 process.env.NODE_ENV = "integration";
 
 const { setup, teardown } = require("../test_helpers/in_memory_mongodb_server");
+const { signupAsMockUser, loginAsMockUser } = require("../test_helpers");
 const request = require("supertest");
 const app = require("../app");
-const User = require("../models/user");
 
 beforeAll(setup);
 afterAll(teardown);
 
-let users;
-
-async function createFakeUsers() {
-  let user = new User({
-    username: "ashley",
-    email: "ashley@email.com",
-    name: "ashley"
-  });
-  const password = "ashley123";
-  user.password = password;
-  user.setPassword(password);
-  const savedUser = await user.save();
-
-  users = { user: savedUser };
-}
-
-async function loginAsAshley(password, agent) {
-  const username = users.user.username;
-  let response = await agent.post("/users/login").send({ username, password });
-  expect(response.status).toEqual(200);
-}
+let mockUser = {
+  username: "ashley",
+  name: "ashley",
+  email: "ashley@email.com",
+  password: "ashley123"
+};
 
 describe("User authentication", () => {
   it("should authenticate user", async () => {
-    await createFakeUsers();
-    const { username, password, email } = users.user;
+    await signupAsMockUser(mockUser);
+    const { username, password, email } = mockUser;
     let response = await request(app)
       .post("/users/login")
       .send({ username, password });
@@ -48,7 +33,7 @@ describe("User authentication", () => {
   });
 
   it("should not authenticate user with invalid password", async () => {
-    const { username } = users.user;
+    const { username } = mockUser;
     let response = await request(app)
       .post("/users/login")
       .send({ username, password: "boguspassword" });
@@ -73,9 +58,10 @@ describe("User authentication", () => {
 
 describe("User logout", () => {
   it("logout should clear cookie storing the jwt", async () => {
-    beforeEach(async () => await createFakeUsers());
+    beforeEach(async () => await signupAsMockUser(mockUser));
+
     const agent = request.agent(app);
-    await loginAsAshley(users.user.password, agent);
+    await loginAsMockUser(agent, mockUser);
     let response = await agent.post("/users/logout");
     expect(response.status).toEqual(200);
   });
