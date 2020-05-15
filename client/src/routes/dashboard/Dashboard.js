@@ -42,11 +42,9 @@ class Dashboard extends React.Component {
       const response = await fetchStockPrices(symbols);
 
       // Get stock prices for each symbol
-      const arrayOfStockPrices = [];
-      for (let i = 0; i < arrayOfSymbols.length; i++) {
-        const prices = response.data[arrayOfSymbols[i]]["quote"]["latestPrice"];
-        arrayOfStockPrices.push(prices);
-      }
+      const arrayOfStockPrices = arrayOfSymbols.map(
+        symbol => response.data[symbol]["quote"]["latestPrice"]
+      );
       let stocks = [...this.state.stocks];
       stocks.map((stock, index) => (stock.price = arrayOfStockPrices[index]));
       this.setState({
@@ -55,21 +53,17 @@ class Dashboard extends React.Component {
       });
 
       // Get historical data
-      const data = [];
-      for (let i = 0; i < arrayOfSymbols.length; i++) {
-        for (
-          let j = 0;
-          j < response.data[arrayOfSymbols[i]]["chart"].length;
-          j++
-        ) {
-          data.push({
-            date: response.data[arrayOfSymbols[i]]["chart"][j]["label"],
-            [arrayOfSymbols[i]]:
-              response.data[arrayOfSymbols[i]]["chart"][j]["close"]
+      const consolidatedData = [];
+      arrayOfSymbols.forEach(symbol =>
+        response.data[symbol]["chart"].forEach((_, i) => {
+          consolidatedData.push({
+            date: response.data[symbol]["chart"][i]["label"],
+            [symbol]: response.data[symbol]["chart"][i]["close"]
           });
-        }
-      }
-      const output = data.reduce((result, item) => {
+        })
+      );
+
+      const output = consolidatedData.reduce((result, item) => {
         const i = result.findIndex(resultItem => resultItem.date === item.date);
         if (i === -1) {
           result.push(item);
@@ -193,13 +187,21 @@ class Dashboard extends React.Component {
         )
       }
     ];
+    const {
+      isLoading,
+      stocks,
+      modalVisible,
+      confirmLoading,
+      data
+    } = this.state;
     return (
       <React.Fragment>
-        {this.state.isLoading && <Spinner />}
-        {!this.state.isLoading && (
+        {isLoading ? (
+          <Spinner />
+        ) : (
           <Container>
             <h3 id="heading">Dashboard</h3>
-            {this.state.stocks.length === 0 && (
+            {stocks.length === 0 && (
               <Empty
                 description={
                   <h6>
@@ -209,22 +211,22 @@ class Dashboard extends React.Component {
                 }
               />
             )}
-            {this.state.stocks.length > 0 && (
+            {stocks.length > 0 && (
               <div>
                 <Table
                   columns={columns}
-                  dataSource={this.state.stocks}
+                  dataSource={stocks}
                   scroll={{ x: 480 }}
                   pagination={{ defaultPageSize: 5 }}
                 />
                 <CollectionCreateForm
                   wrappedComponentRef={this.saveFormRef}
-                  modalVisible={this.state.modalVisible}
+                  modalVisible={modalVisible}
                   handleModalCancel={this.handleModalCancel}
                   handleEdit={this.handleEdit}
-                  confirmLoading={this.state.confirmLoading}
+                  confirmLoading={confirmLoading}
                 />
-                <Historical data={this.state.data} />
+                <Historical data={data} />
               </div>
             )}
           </Container>

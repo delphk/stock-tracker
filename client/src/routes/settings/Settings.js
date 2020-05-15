@@ -72,8 +72,9 @@ class Settings extends React.Component {
     const { isLoading, verificationMessage, userInfo } = this.state;
     return (
       <React.Fragment>
-        {isLoading && <Spinner />}
-        {!isLoading && (
+        {isLoading ? (
+          <Spinner />
+        ) : (
           <Container style={{ paddingTop: "1%" }}>
             {verificationMessage && (
               <Alert
