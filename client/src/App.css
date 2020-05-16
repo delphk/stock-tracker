@@ -71,7 +71,7 @@ hr {
   padding-top: 10%;
 }
 
-.custom-form h3 {
+.custom-form h1 {
   text-align: center;
   margin-bottom: 28px;
 }
@@ -163,6 +163,7 @@ tr:nth-child(even) {
 /* Format headers */
 .heading {
   margin: 20px 0;
+  font-size: 28px;
 }
 
 #verified {

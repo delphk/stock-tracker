@@ -41,7 +41,7 @@ class Login extends React.Component {
             <Alert message={this.state.errorMessage} type="error" showIcon />
           )}
           <Form onSubmit={this.handleSubmit} className="custom-form">
-            <h3>Log in to your account</h3>
+            <h1 className="heading">Log in to your account</h1>
             <Form.Item>
               {getFieldDecorator("username")(
                 <Input

@@ -200,7 +200,7 @@ class Dashboard extends React.Component {
           <Spinner />
         ) : (
           <Container>
-            <h3 className="heading">Dashboard</h3>
+            <h1 className="heading">Dashboard</h1>
             {stocks.length === 0 && (
               <Empty
                 description={

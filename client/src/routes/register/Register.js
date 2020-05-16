@@ -88,7 +88,7 @@ class Register extends React.Component {
               />
             )}
             <Form onSubmit={this.handleSubmit} className="custom-form">
-              <h3>Create your account</h3>
+              <h1 className="heading">Create your account</h1>
               <Form.Item>
                 {getFieldDecorator("name", {
                   rules: [

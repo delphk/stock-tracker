@@ -21,7 +21,7 @@ const Historical = ({ data }) => {
   return (
     data.length > 0 && (
       <div>
-        <h3 className="heading">Historical Chart</h3>
+        <h1 className="heading">Historical Chart</h1>
         <ResponsiveContainer width="80%" height={400}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
