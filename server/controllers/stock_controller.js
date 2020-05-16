@@ -16,13 +16,18 @@ const getSymbol = async (req, res) => {
 
 const getStockPrices = async (req, res) => {
   try {
-    const response = await iex.get(
-      `/market/batch?symbols=${
-        req.params.id
-      }&types=quote,chart&range=1m&token=${process.env.IEX_API_KEY}`
-    );
-    const url = getUrlFromRequest(req);
-    cache.set(url, response.data);
+    const { range } = req.query;
+    let URL = `/market/batch?symbols=${req.params.id}&token=${
+      process.env.IEX_API_KEY
+    }&types=quote`;
+    if (range) {
+      URL = URL + `,chart&range=${range}`;
+    }
+    const response = await iex.get(URL);
+    if (range) {
+      const url = getUrlFromRequest(req);
+      cache.set(url, response.data);
+    }
     res.json(response.data);
   } catch (err) {
     res.status(500);

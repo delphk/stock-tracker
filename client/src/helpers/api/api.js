@@ -30,8 +30,11 @@ const deleteStock = async id =>
     url: `/stocks/${id}`
   });
 
-const fetchStockPrices = async symbols =>
+const fetchCurrentStockPrices = async symbols =>
   await apiRequest({ url: `/stocks/prices/${symbols}` });
+
+const fetchHistoricalPrices = async (symbols, range = "1m") =>
+  await apiRequest({ url: `/stocks/prices/${symbols}?&range=${range}` });
 
 //Settings APIs
 const getUserInfo = async () => await apiRequest({ url: "/users" });
@@ -65,7 +68,8 @@ export {
   loginUser,
   registerUser,
   getStocks,
-  fetchStockPrices,
+  fetchCurrentStockPrices,
+  fetchHistoricalPrices,
   editStock,
   deleteStock,
   getUserInfo,

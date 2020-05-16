@@ -7,7 +7,8 @@ import Spinner from "../../components/spinner/Spinner";
 import CollectionCreateForm from "../../components/FormInModal";
 import {
   getStocks,
-  fetchStockPrices,
+  fetchCurrentStockPrices,
+  fetchHistoricalPrices,
   editStock,
   deleteStock
 } from "../../helpers/api/api";
@@ -17,7 +18,8 @@ class Dashboard extends React.Component {
     stocks: [],
     modalVisible: false,
     data: [],
-    isLoading: true
+    isLoading: true,
+    historicalPricesLoading: true
   };
 
   async componentDidMount() {
@@ -26,6 +28,7 @@ class Dashboard extends React.Component {
       this.setState({ stocks: response.data.stocks });
       if (this.state.stocks.length > 0) {
         this.getStockPrices();
+        this.getHistoricalData();
       } else {
         this.setState({ isLoading: false });
       }
@@ -39,7 +42,7 @@ class Dashboard extends React.Component {
     try {
       const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
       const symbols = arrayOfSymbols.join(",");
-      const response = await fetchStockPrices(symbols);
+      const response = await fetchCurrentStockPrices(symbols);
 
       // Get stock prices for each symbol
       const arrayOfStockPrices = arrayOfSymbols.map(
@@ -51,8 +54,17 @@ class Dashboard extends React.Component {
         stocks,
         isLoading: false
       });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-      // Get historical data
+  getHistoricalData = async () => {
+    try {
+      const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
+      const symbols = arrayOfSymbols.join(",");
+      const response = await fetchHistoricalPrices(symbols);
+
       const consolidatedData = [];
       arrayOfSymbols.forEach(symbol =>
         response.data[symbol]["chart"].forEach((_, i) => {
@@ -73,7 +85,8 @@ class Dashboard extends React.Component {
         return result;
       }, []);
       this.setState({
-        data: output
+        data: output,
+        historicalPricesLoading: false
       });
     } catch (err) {
       console.log(err);
@@ -192,7 +205,8 @@ class Dashboard extends React.Component {
       stocks,
       modalVisible,
       confirmLoading,
-      data
+      data,
+      historicalPricesLoading
     } = this.state;
     return (
       <React.Fragment>
@@ -226,7 +240,11 @@ class Dashboard extends React.Component {
                   handleEdit={this.handleEdit}
                   confirmLoading={confirmLoading}
                 />
-                <Historical data={data} />
+                {historicalPricesLoading ? (
+                  <Spinner />
+                ) : (
+                  <Historical data={data} />
+                )}
               </div>
             )}
           </Container>
