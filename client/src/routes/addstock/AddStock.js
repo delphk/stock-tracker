@@ -73,7 +73,7 @@ class AddStock extends React.Component {
           {this.state.errorMessage && (
             <Alert message={this.state.errorMessage} type="error" showIcon />
           )}
-          <h2 id="heading">Add Stocks</h2>
+          <h2 className="heading">Add Stocks</h2>
 
           {this.state.isSymbolValid === false && (
             <Form

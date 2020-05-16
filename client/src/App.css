@@ -141,11 +141,12 @@ tr:nth-child(even) {
 
 /* Navbar formatting */
 #navbarbrand:hover,
-#navbarlink:hover {
+.navbarlink:hover {
   color: #a5a5a5;
+  text-decoration: none;
 }
 
-#navbarlink,
+.navbarlink,
 #navbarbrand {
   color: white;
   margin-right: 0.5rem;
@@ -160,7 +161,7 @@ tr:nth-child(even) {
 }
 
 /* Format headers */
-#heading {
+.heading {
   margin: 20px 0;
 }
 

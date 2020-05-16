@@ -45,62 +45,58 @@ class App extends Component {
       <Router>
         <React.Fragment>
           <AppNavBar isLoggedIn={isLoggedIn} />
-
-          <Switch>
-            <Route
-              path="/login"
-              render={() => {
-                return isLoggedIn ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <LoginForm toggleLogin={this.toggleLogin} />
-                );
-              }}
-            />
-            <AuthenticatedRoute
-              isLoggedIn={isLoggedIn}
-              exact
-              path="/"
-              component={Dashboard}
-            />
-            <Route
-              path="/register"
-              render={() => {
-                return isLoggedIn ? (
-                  <Redirect to="/dashboard" />
-                ) : (
-                  <RegistrationForm />
-                );
-              }}
-            />
-            <AuthenticatedRoute
-              isLoggedIn={isLoggedIn}
-              path="/settings"
-              component={Settings}
-            />
-            <AuthenticatedRoute
-              isLoggedIn={isLoggedIn}
-              path="/dashboard"
-              component={Dashboard}
-            />
-            <AuthenticatedRoute
-              isLoggedIn={isLoggedIn}
-              path="/addstock"
-              component={AddStock}
-            />
-
-            <Route
-              path="/logout"
-              render={() => {
-                return isLoggedIn ? (
-                  <Logout toggleLogin={this.toggleLogin} />
-                ) : (
-                  <Redirect to="/login" />
-                );
-              }}
-            />
-            <Route component={NotFound} />
-          </Switch>
+          <div role="main">
+            <Switch>
+              <Route
+                path="/login"
+                render={() => {
+                  return isLoggedIn ? (
+                    <Redirect to="/dashboard" />
+                  ) : (
+                    <LoginForm toggleLogin={this.toggleLogin} />
+                  );
+                }}
+              />
+              <AuthenticatedRoute
+                isLoggedIn={isLoggedIn}
+                exact
+                path="/"
+                component={Dashboard}
+              />
+              <Route
+                path="/register"
+                render={() => {
+                  return isLoggedIn ? (
+                    <Redirect to="/dashboard" />
+                  ) : (
+                    <RegistrationForm />
+                  );
+                }}
+              />
+              <AuthenticatedRoute
+                isLoggedIn={isLoggedIn}
+                path="/settings"
+                component={Settings}
+              />
+              <AuthenticatedRoute
+                isLoggedIn={isLoggedIn}
+                path="/dashboard"
+                component={Dashboard}
+              />
+              <AuthenticatedRoute
+                isLoggedIn={isLoggedIn}
+                path="/addstock"
+                component={AddStock}
+              />
+              <AuthenticatedRoute
+                toggleLogin={this.toggleLogin}
+                isLoggedIn={isLoggedIn}
+                path="/logout"
+                component={Logout}
+              />
+              <Route component={NotFound} />
+            </Switch>
+          </div>
         </React.Fragment>
       </Router>
     );
