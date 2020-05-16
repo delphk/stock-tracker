@@ -103,6 +103,7 @@ class Register extends React.Component {
                     prefix={<Icon type="user" className="form-icon" />}
                     placeholder="Name"
                     size="large"
+                    aria-label="Name"
                   />
                 )}
               </Form.Item>
@@ -123,6 +124,7 @@ class Register extends React.Component {
                     prefix={<Icon type="user" className="form-icon" />}
                     placeholder="Username"
                     size="large"
+                    aria-label="Username"
                   />
                 )}
               </Form.Item>
@@ -143,6 +145,7 @@ class Register extends React.Component {
                     prefix={<Icon type="mail" className="form-icon" />}
                     placeholder="Email"
                     size="large"
+                    aria-label="Email"
                   />
                 )}
               </Form.Item>
@@ -167,6 +170,7 @@ class Register extends React.Component {
                     prefix={<Icon type="lock" className="form-icon" />}
                     placeholder="Password (min 8 characters)"
                     size="large"
+                    aria-label="Password"
                   />
                 )}
               </Form.Item>
@@ -187,6 +191,7 @@ class Register extends React.Component {
                     placeholder="Confirm password"
                     size="large"
                     onBlur={this.handleConfirmBlur}
+                    aria-label="Confirm password"
                   />
                 )}
               </Form.Item>

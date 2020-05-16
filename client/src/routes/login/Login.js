@@ -47,6 +47,7 @@ class Login extends React.Component {
                 <Input
                   prefix={<Icon type="user" className="form-icon" />}
                   placeholder="Username"
+                  aria-label="Username"
                   size="large"
                   name="username"
                   onChange={this.handleChange}
@@ -59,6 +60,7 @@ class Login extends React.Component {
                 <Input.Password
                   prefix={<Icon type="lock" className="form-icon" />}
                   placeholder="Password"
+                  aria-label="Password"
                   size="large"
                   name="password"
                   onChange={this.handleChange}
