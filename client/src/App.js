@@ -1,4 +1,10 @@
 import React, { Component } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import AppNavBar from "./components/navbar/AppNavbar";
 import LoginForm from "./routes/login/Login";
@@ -9,13 +15,6 @@ import Logout from "./routes/logout/Logout";
 import NotFound from "./routes/notfound/NotFound";
 import Settings from "./routes/settings/Settings";
 import { getStocks } from "./helpers/api/api";
-
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";

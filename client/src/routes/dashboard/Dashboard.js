@@ -228,6 +228,7 @@ class Dashboard extends React.Component {
             {stocks.length > 0 && (
               <div>
                 <Table
+                  rowKey="name"
                   columns={columns}
                   dataSource={stocks}
                   scroll={{ x: 480 }}
