@@ -7,7 +7,7 @@ function getUrlFromRequest(req) {
   return url;
 }
 
-function get(req, res, next) {
+function getDataFromCache(req, res, next) {
   const url = getUrlFromRequest(req);
   const content = cache.get(url);
   if (content) {
@@ -16,4 +16,4 @@ function get(req, res, next) {
   return next();
 }
 
-module.exports = { cache, get, getUrlFromRequest };
+module.exports = { cache, getDataFromCache, getUrlFromRequest };
