@@ -142,6 +142,12 @@ const updateUserInfo = async (req, res) => {
   }
 };
 
+const checkAuthenticated = async (req, res) => {
+  if (req.user) {
+    res.json({ authenticated: true });
+  }
+};
+
 module.exports = {
   registerNewUser,
   userLogin,
@@ -150,5 +156,6 @@ module.exports = {
   sendVerificationMail,
   userConfirmation,
   getUserInfo,
-  updateUserInfo
+  updateUserInfo,
+  checkAuthenticated
 };

@@ -6,7 +6,6 @@ import Historical from "../historical/Historical";
 import Spinner from "../../components/spinner/Spinner";
 import CollectionCreateForm from "../../components/FormInModal";
 import {
-  getStocks,
   fetchCurrentStockPrices,
   fetchHistoricalPrices,
   editStock,
@@ -17,81 +16,26 @@ class Dashboard extends React.Component {
   state = {
     stocks: [],
     modalVisible: false,
-    data: [],
+    historicalData: [],
     isLoading: true,
     historicalPricesLoading: true
   };
 
   async componentDidMount() {
     try {
-      const response = await getStocks();
-      this.setState({ stocks: response.data.stocks });
+      const response = await fetchCurrentStockPrices();
+      this.setState({ stocks: response.data, isLoading: false });
       if (this.state.stocks.length > 0) {
-        this.getStockPrices();
-        this.getHistoricalData();
-      } else {
-        this.setState({ isLoading: false });
+        const historicalData = await fetchHistoricalPrices();
+        this.setState({
+          historicalData: historicalData.data,
+          historicalPricesLoading: false
+        });
       }
     } catch (err) {
       console.log(err);
     }
   }
-
-  getStockPrices = async () => {
-    // Make batch query to API for all the stocks added to dashboard
-    try {
-      const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
-      const symbols = arrayOfSymbols.join(",");
-      const response = await fetchCurrentStockPrices(symbols);
-
-      // Get stock prices for each symbol
-      const arrayOfStockPrices = arrayOfSymbols.map(
-        symbol => response.data[symbol]["quote"]["latestPrice"]
-      );
-      let stocks = [...this.state.stocks];
-      stocks.map((stock, index) => (stock.price = arrayOfStockPrices[index]));
-      this.setState({
-        stocks,
-        isLoading: false
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  getHistoricalData = async () => {
-    try {
-      const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
-      const symbols = arrayOfSymbols.join(",");
-      const response = await fetchHistoricalPrices(symbols);
-
-      const consolidatedData = [];
-      arrayOfSymbols.forEach(symbol =>
-        response.data[symbol]["chart"].forEach((_, i) => {
-          consolidatedData.push({
-            date: response.data[symbol]["chart"][i]["label"],
-            [symbol]: response.data[symbol]["chart"][i]["close"]
-          });
-        })
-      );
-
-      const output = consolidatedData.reduce((result, item) => {
-        const i = result.findIndex(resultItem => resultItem.date === item.date);
-        if (i === -1) {
-          result.push(item);
-        } else {
-          result[i] = { ...result[i], ...item };
-        }
-        return result;
-      }, []);
-      this.setState({
-        data: output,
-        historicalPricesLoading: false
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   formatStockPrice = price => {
     return "$" + price.toFixed(2);
@@ -205,7 +149,7 @@ class Dashboard extends React.Component {
       stocks,
       modalVisible,
       confirmLoading,
-      data,
+      historicalData,
       historicalPricesLoading
     } = this.state;
     return (
@@ -244,7 +188,7 @@ class Dashboard extends React.Component {
                 {historicalPricesLoading ? (
                   <Spinner />
                 ) : (
-                  <Historical data={data} />
+                  <Historical data={historicalData} />
                 )}
               </div>
             )}

@@ -14,7 +14,7 @@ import Dashboard from "./routes/dashboard/Dashboard";
 import Logout from "./routes/logout/Logout";
 import NotFound from "./routes/notfound/NotFound";
 import Settings from "./routes/settings/Settings";
-import { getStocks } from "./helpers/api/api";
+import { authenticationCheck } from "./helpers/api/api";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -29,8 +29,8 @@ class App extends Component {
   // Checks whether user is logged in
   async componentDidMount() {
     try {
-      const response = await getStocks();
-      if (response.data.stocks) {
+      const response = await authenticationCheck();
+      if (response.status === 200) {
         this.setState({ isLoggedIn: true });
       }
     } catch (err) {

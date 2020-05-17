@@ -6,7 +6,6 @@ const { getDataFromCache } = require("../middlewares/cache");
 const {
   getSymbol,
   getStockPrices,
-  getStocks,
   addStock,
   deleteStock,
   editStock
@@ -18,15 +17,13 @@ router.get(
   getSymbol
 );
 
+//Gets prices (current and historical) of stocks saved by user
 router.get(
-  "/prices/:id",
+  "/prices",
   passport.authenticate("jwt", { session: false }),
   getDataFromCache,
   getStockPrices
 );
-
-//Gets stocks saved by user
-router.get("/", passport.authenticate("jwt", { session: false }), getStocks);
 
 // Handle add new stock
 router.post("/", passport.authenticate("jwt", { session: false }), addStock);
