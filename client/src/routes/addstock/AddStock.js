@@ -7,7 +7,7 @@ class AddStock extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      companyName: "",
+      name: "",
       symbol: "",
       latestPrice: "",
       targetlow: undefined,
@@ -50,7 +50,7 @@ class AddStock extends React.Component {
       else {
         const { companyName, symbol, latestPrice } = response.data;
         this.setState({
-          companyName,
+          name: companyName,
           symbol,
           latestPrice,
           isSymbolValid: true,
@@ -69,7 +69,7 @@ class AddStock extends React.Component {
       errorMessage,
       isSymbolValid,
       symbol,
-      companyName,
+      name,
       latestPrice,
       targethigh,
       targetlow
@@ -111,7 +111,7 @@ class AddStock extends React.Component {
               <Row>
                 <Col span={12}>
                   <p className="label">Name</p>
-                  <p className="statistic">{companyName}</p>
+                  <p className="statistic">{name}</p>
                   <p className="subtext">({symbol})</p>
                 </Col>
                 <Col span={12}>
