@@ -7,7 +7,7 @@ describe("Renders on page", () => {
   test("should render heading to create account", () => {
     const { container } = renderWithRouter(<Register />);
 
-    const title = container.querySelector("h3");
+    const title = container.querySelector("h1");
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent("Create your account");

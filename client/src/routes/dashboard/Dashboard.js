@@ -6,8 +6,8 @@ import Historical from "../historical/Historical";
 import Spinner from "../../components/spinner/Spinner";
 import CollectionCreateForm from "../../components/FormInModal";
 import {
-  getStocks,
-  fetchStockPrices,
+  fetchCurrentStockPrices,
+  fetchHistoricalPrices,
   editStock,
   deleteStock
 } from "../../helpers/api/api";
@@ -16,75 +16,26 @@ class Dashboard extends React.Component {
   state = {
     stocks: [],
     modalVisible: false,
-    data: [],
-    isLoading: true
+    historicalData: [],
+    isLoading: true,
+    historicalPricesLoading: true
   };
 
   async componentDidMount() {
     try {
-      const response = await getStocks();
-      this.setState({ stocks: response.data.stocks });
+      const response = await fetchCurrentStockPrices();
+      this.setState({ stocks: response.data, isLoading: false });
       if (this.state.stocks.length > 0) {
-        this.getStockPrices();
-      } else {
-        this.setState({ isLoading: false });
+        const historicalData = await fetchHistoricalPrices();
+        this.setState({
+          historicalData: historicalData.data,
+          historicalPricesLoading: false
+        });
       }
     } catch (err) {
       console.log(err);
     }
   }
-
-  getStockPrices = async () => {
-    // Make batch query to API for all the stocks added to dashboard
-    try {
-      const arrayOfSymbols = this.state.stocks.map(stock => stock.symbol);
-      const symbols = arrayOfSymbols.join(",");
-      const response = await fetchStockPrices(symbols);
-
-      // Get stock prices for each symbol
-      const arrayOfStockPrices = [];
-      for (let i = 0; i < arrayOfSymbols.length; i++) {
-        const prices = response.data[arrayOfSymbols[i]]["quote"]["latestPrice"];
-        arrayOfStockPrices.push(prices);
-      }
-      let stocks = [...this.state.stocks];
-      stocks.map((stock, index) => (stock.price = arrayOfStockPrices[index]));
-      this.setState({
-        stocks,
-        isLoading: false
-      });
-
-      // Get historical data
-      const data = [];
-      for (let i = 0; i < arrayOfSymbols.length; i++) {
-        for (
-          let j = 0;
-          j < response.data[arrayOfSymbols[i]]["chart"].length;
-          j++
-        ) {
-          data.push({
-            date: response.data[arrayOfSymbols[i]]["chart"][j]["label"],
-            [arrayOfSymbols[i]]:
-              response.data[arrayOfSymbols[i]]["chart"][j]["close"]
-          });
-        }
-      }
-      const output = data.reduce((result, item) => {
-        const i = result.findIndex(resultItem => resultItem.date === item.date);
-        if (i === -1) {
-          result.push(item);
-        } else {
-          result[i] = { ...result[i], ...item };
-        }
-        return result;
-      }, []);
-      this.setState({
-        data: output
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   formatStockPrice = price => {
     return "$" + price.toFixed(2);
@@ -193,13 +144,22 @@ class Dashboard extends React.Component {
         )
       }
     ];
+    const {
+      isLoading,
+      stocks,
+      modalVisible,
+      confirmLoading,
+      historicalData,
+      historicalPricesLoading
+    } = this.state;
     return (
       <React.Fragment>
-        {this.state.isLoading && <Spinner />}
-        {!this.state.isLoading && (
+        {isLoading ? (
+          <Spinner />
+        ) : (
           <Container>
-            <h3 id="heading">Dashboard</h3>
-            {this.state.stocks.length === 0 && (
+            <h1 className="heading">Dashboard</h1>
+            {stocks.length === 0 && (
               <Empty
                 description={
                   <h6>
@@ -209,22 +169,27 @@ class Dashboard extends React.Component {
                 }
               />
             )}
-            {this.state.stocks.length > 0 && (
+            {stocks.length > 0 && (
               <div>
                 <Table
+                  rowKey="name"
                   columns={columns}
-                  dataSource={this.state.stocks}
+                  dataSource={stocks}
                   scroll={{ x: 480 }}
                   pagination={{ defaultPageSize: 5 }}
                 />
                 <CollectionCreateForm
                   wrappedComponentRef={this.saveFormRef}
-                  modalVisible={this.state.modalVisible}
+                  modalVisible={modalVisible}
                   handleModalCancel={this.handleModalCancel}
                   handleEdit={this.handleEdit}
-                  confirmLoading={this.state.confirmLoading}
+                  confirmLoading={confirmLoading}
                 />
-                <Historical data={this.state.data} />
+                {historicalPricesLoading ? (
+                  <Spinner />
+                ) : (
+                  <Historical data={historicalData} />
+                )}
               </div>
             )}
           </Container>

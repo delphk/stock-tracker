@@ -71,7 +71,7 @@ hr {
   padding-top: 10%;
 }
 
-.custom-form h3 {
+.custom-form h1 {
   text-align: center;
   margin-bottom: 28px;
 }
@@ -141,11 +141,12 @@ tr:nth-child(even) {
 
 /* Navbar formatting */
 #navbarbrand:hover,
-#navbarlink:hover {
+.navbarlink:hover {
   color: #a5a5a5;
+  text-decoration: none;
 }
 
-#navbarlink,
+.navbarlink,
 #navbarbrand {
   color: white;
   margin-right: 0.5rem;
@@ -160,8 +161,9 @@ tr:nth-child(even) {
 }
 
 /* Format headers */
-#heading {
+.heading {
   margin: 20px 0;
+  font-size: 28px;
 }
 
 #verified {

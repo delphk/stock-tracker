@@ -10,7 +10,7 @@ const props = {
 describe("Renders on page", () => {
   test("should render login heading", () => {
     const { container } = renderWithRouter(<LoginForm {...props} />);
-    const title = container.querySelector("h3");
+    const title = container.querySelector("h1");
 
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent("Log in to your account");

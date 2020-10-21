@@ -1,5 +1,9 @@
 import { apiRequest } from "../../utils/apiRequest";
 
+//Check user authenticated API
+const authenticationCheck = async () =>
+  await apiRequest({ url: "/users/authenticationcheck" });
+
 //Login API
 const loginUser = async payload =>
   await apiRequest({
@@ -17,7 +21,6 @@ const registerUser = async payload =>
   });
 
 //Dashboard APIs
-const getStocks = async () => await apiRequest({ url: "/stocks" });
 const editStock = async (id, payload) =>
   await apiRequest({
     method: "put",
@@ -30,8 +33,11 @@ const deleteStock = async id =>
     url: `/stocks/${id}`
   });
 
-const fetchStockPrices = async symbols =>
-  await apiRequest({ url: `/stocks/prices/${symbols}` });
+const fetchCurrentStockPrices = async () =>
+  await apiRequest({ url: `/stocks/prices` });
+
+const fetchHistoricalPrices = async (range = "1m") =>
+  await apiRequest({ url: `/stocks/prices?&range=${range}` });
 
 //Settings APIs
 const getUserInfo = async () => await apiRequest({ url: "/users" });
@@ -62,10 +68,11 @@ const userLogout = async () =>
   await apiRequest({ method: "post", url: "/users/logout" });
 
 export {
+  authenticationCheck,
   loginUser,
   registerUser,
-  getStocks,
-  fetchStockPrices,
+  fetchCurrentStockPrices,
+  fetchHistoricalPrices,
   editStock,
   deleteStock,
   getUserInfo,

@@ -9,7 +9,7 @@ class AddStock extends React.Component {
     this.state = {
       name: "",
       symbol: "",
-      price: "",
+      latestPrice: "",
       targetlow: undefined,
       targethigh: undefined,
       isSymbolValid: false,
@@ -48,13 +48,11 @@ class AddStock extends React.Component {
       if (response.data.message)
         this.setState({ errorMessage: "No such stock exists :(" });
       else {
-        const name = response.data["companyName"];
-        const symbol = response.data["symbol"];
-        const price = response.data["latestPrice"];
+        const { companyName, symbol, latestPrice } = response.data;
         this.setState({
-          name,
+          name: companyName,
           symbol,
-          price,
+          latestPrice,
           isSymbolValid: true,
           errorMessage: ""
         });
@@ -67,27 +65,34 @@ class AddStock extends React.Component {
   };
 
   render() {
+    const {
+      errorMessage,
+      isSymbolValid,
+      symbol,
+      name,
+      latestPrice,
+      targethigh,
+      targetlow
+    } = this.state;
     return (
       <div className="form-container">
         <div className="responsive-container">
-          {this.state.errorMessage && (
-            <Alert message={this.state.errorMessage} type="error" showIcon />
+          {errorMessage && (
+            <Alert message={errorMessage} type="error" showIcon />
           )}
-          <h2 id="heading">Add Stocks</h2>
+          <h1 className="heading">Add Stocks</h1>
 
-          {this.state.isSymbolValid === false && (
-            <Form
-              onSubmit={e => this.getSymbol(this.state.symbol, e)}
-              layout="vertical"
-            >
+          {isSymbolValid === false && (
+            <Form onSubmit={e => this.getSymbol(symbol, e)} layout="vertical">
               <Form.Item label="Symbol">
                 <Input
                   type="text"
                   name="symbol"
                   size="large"
-                  value={this.state.symbol}
+                  value={symbol}
                   onChange={this.handleChange}
                   placeholder="Enter symbol"
+                  aria-label="Enter symbol"
                 />
               </Form.Item>
               <Button
@@ -101,17 +106,17 @@ class AddStock extends React.Component {
             </Form>
           )}
 
-          {this.state.isSymbolValid && (
+          {isSymbolValid && (
             <div>
               <Row>
                 <Col span={12}>
                   <p className="label">Name</p>
-                  <p className="statistic">{this.state.name}</p>
-                  <p className="subtext">({this.state.symbol})</p>
+                  <p className="statistic">{name}</p>
+                  <p className="subtext">({symbol})</p>
                 </Col>
                 <Col span={12}>
                   <p className="label">Current Price</p>
-                  <p className="statistic">${this.state.price}</p>
+                  <p className="statistic">${latestPrice}</p>
                 </Col>
               </Row>
               <Form onSubmit={this.handleSubmit} layout="vertical">
@@ -120,7 +125,7 @@ class AddStock extends React.Component {
                     type="number"
                     size="large"
                     name="targetlow"
-                    value={this.state.targetlow}
+                    value={targetlow}
                     onChange={this.handleChange}
                   />
                 </Form.Item>
@@ -129,7 +134,7 @@ class AddStock extends React.Component {
                     type="number"
                     size="large"
                     name="targethigh"
-                    value={this.state.targethigh}
+                    value={targethigh}
                     onChange={this.handleChange}
                   />
                 </Form.Item>

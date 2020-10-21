@@ -1,11 +1,11 @@
 import React from "react";
 import NotFound from "./NotFound";
-import { render } from "react-testing-library";
+import { renderWithRouter } from "../../utils/setUpTests";
 
 it("should render 404 image", () => {
-  const { getByAltText } = render(<NotFound />);
+  const { getByText } = renderWithRouter(<NotFound />);
 
-  const img = getByAltText("404");
+  const errorText = getByText("Sorry, the page you visited does not exist.");
 
-  expect(img).toBeInTheDocument();
+  expect(errorText).toBeInTheDocument();
 });

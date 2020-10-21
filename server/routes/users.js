@@ -10,8 +10,16 @@ const {
   sendVerificationMail,
   userConfirmation,
   getUserInfo,
-  updateUserInfo
+  updateUserInfo,
+  checkAuthenticated
 } = require("../controllers/user_controller");
+
+// check user authenticated
+router.get(
+  "/authenticationcheck",
+  passport.authenticate("jwt", { session: false }),
+  checkAuthenticated
+);
 
 // Handle user registration
 router.post("/register", registerNewUser);

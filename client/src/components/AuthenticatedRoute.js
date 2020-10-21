@@ -8,7 +8,7 @@ const AuthenticatedRoute = ({ component: Component, isLoggedIn, ...rest }) => {
       {...rest}
       render={props =>
         isLoggedIn === true ? (
-          <Component {...props} />
+          <Component {...props} {...rest} />
         ) : isLoggedIn === false ? (
           <Redirect
             to={{ pathname: "/login", state: { from: props.location } }}

@@ -1,14 +1,19 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Result, Button } from "antd";
 
 const NotFound = () => {
   return (
-    <div>
-      <img
-        alt="404"
-        style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
-        src="https://memegen.link/grumpycat/404/page_not_found.jpg?watermark=none"
-      />
-    </div>
+    <Result
+      status="404"
+      title="404"
+      subTitle="Sorry, the page you visited does not exist."
+      extra={
+        <Link to="/">
+          <Button type="primary">Back Home</Button>
+        </Link>
+      }
+    />
   );
 };
 

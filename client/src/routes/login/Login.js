@@ -41,12 +41,13 @@ class Login extends React.Component {
             <Alert message={this.state.errorMessage} type="error" showIcon />
           )}
           <Form onSubmit={this.handleSubmit} className="custom-form">
-            <h3>Log in to your account</h3>
+            <h1 className="heading">Log in to your account</h1>
             <Form.Item>
               {getFieldDecorator("username")(
                 <Input
                   prefix={<Icon type="user" className="form-icon" />}
                   placeholder="Username"
+                  aria-label="Username"
                   size="large"
                   name="username"
                   onChange={this.handleChange}
@@ -59,6 +60,7 @@ class Login extends React.Component {
                 <Input.Password
                   prefix={<Icon type="lock" className="form-icon" />}
                   placeholder="Password"
+                  aria-label="Password"
                   size="large"
                   name="password"
                   onChange={this.handleChange}

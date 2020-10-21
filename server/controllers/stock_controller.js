@@ -1,6 +1,11 @@
 const iex = require("../api/iex");
 const Stock = require("../models/stock");
 const { cache, getUrlFromRequest } = require("../middlewares/cache");
+const {
+  getQueryUrlString,
+  mapPriceToStocks,
+  mapHistoricalPrices
+} = require("../utils/stockUtils");
 
 const getSymbol = async (req, res) => {
   try {
@@ -16,26 +21,22 @@ const getSymbol = async (req, res) => {
 
 const getStockPrices = async (req, res) => {
   try {
-    const response = await iex.get(
-      `/market/batch?symbols=${
-        req.params.id
-      }&types=quote,chart&range=1m&token=${process.env.IEX_API_KEY}`
-    );
-    const url = getUrlFromRequest(req);
-    cache.set(url, response.data);
-    res.json(response.data);
+    const userid = req.user._id;
+    let stocks = await Stock.find({ userid });
+    if (stocks.length > 0) {
+      const { range } = req.query;
+      const arrayOfSymbols = stocks.map(stock => stock.symbol);
+      const iexURL = getQueryUrlString(arrayOfSymbols, range);
+      const response = await iex.get(iexURL);
+      if (range) {
+        stocks = mapHistoricalPrices(response.data, arrayOfSymbols);
+        const cacheUrl = getUrlFromRequest(req);
+        cache.set(cacheUrl, stocks);
+      } else stocks = mapPriceToStocks(response.data, stocks, arrayOfSymbols);
+    }
+    res.json(stocks);
   } catch (err) {
     res.status(500);
-  }
-};
-
-const getStocks = async (req, res) => {
-  try {
-    const userid = req.user._id;
-    const stocks = await Stock.find({ userid });
-    res.json({ stocks });
-  } catch (err) {
-    console.log(err);
   }
 };
 
@@ -73,7 +74,6 @@ const editStock = async (req, res) => {
 module.exports = {
   getSymbol,
   getStockPrices,
-  getStocks,
   addStock,
   deleteStock,
   editStock

@@ -72,8 +72,9 @@ class Settings extends React.Component {
     const { isLoading, verificationMessage, userInfo } = this.state;
     return (
       <React.Fragment>
-        {isLoading && <Spinner />}
-        {!isLoading && (
+        {isLoading ? (
+          <Spinner />
+        ) : (
           <Container style={{ paddingTop: "1%" }}>
             {verificationMessage && (
               <Alert
@@ -82,7 +83,7 @@ class Settings extends React.Component {
                 showIcon
               />
             )}
-            <h2 id="heading">Account Settings</h2>
+            <h1 className="heading">Account Settings</h1>
             <Row>
               <Col sm={24} md={8} lg={8} xl={8}>
                 <p className="subheader">Profile</p>

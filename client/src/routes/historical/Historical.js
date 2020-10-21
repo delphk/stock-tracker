@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Line,
   XAxis,
@@ -9,50 +9,40 @@ import {
   LineChart,
   Legend
 } from "recharts";
+import { getRandomColor } from "../../utils";
 
-class Historical extends Component {
-  getRandomColor() {
-    var letters = "0123456789ABCDEF";
-    var color = "#";
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+const Historical = ({ data }) => {
+  let keys;
+  if (data.length > 0) {
+    keys = Object.keys(data[0]);
+    keys.splice(0, 1);
   }
 
-  render() {
-    let keys;
-    if (this.props.data.length > 0) {
-      keys = Object.keys(this.props.data[0]);
-      keys.splice(0, 1);
-    }
-
-    return (
-      this.props.data.length > 0 && (
-        <div>
-          <h3 id="heading">Historical Chart</h3>
-          <ResponsiveContainer width="80%" height={400}>
-            <LineChart data={this.props.data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" minTickGap={15} />
-              <YAxis />
-              {keys.map((key, index) => {
-                return (
-                  <Line
-                    key={index}
-                    type="monotone"
-                    dataKey={key}
-                    stroke={this.getRandomColor()}
-                  />
-                );
-              })}
-              <Tooltip />;<Legend />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      )
-    );
-  }
-}
+  return (
+    data.length > 0 && (
+      <div>
+        <h1 className="heading">Historical Chart</h1>
+        <ResponsiveContainer width="80%" height={400}>
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" minTickGap={15} />
+            <YAxis />
+            {keys.map((key, index) => {
+              return (
+                <Line
+                  key={index}
+                  type="monotone"
+                  dataKey={key}
+                  stroke={getRandomColor()}
+                />
+              );
+            })}
+            <Tooltip />;<Legend />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    )
+  );
+};
 
 export default Historical;
