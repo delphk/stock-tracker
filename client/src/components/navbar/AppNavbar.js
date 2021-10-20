@@ -76,7 +76,7 @@ const AppNavBar = ({ isLoggedIn }) => {
                   </NavLink>
                 </NavItem>
               </React.Fragment>
-            ) : (
+            ) : isLoggedIn === false ? (
               <React.Fragment>
                 <NavItem>
                   <NavLink
@@ -101,7 +101,7 @@ const AppNavBar = ({ isLoggedIn }) => {
                   </NavLink>
                 </NavItem>
               </React.Fragment>
-            )}
+            ) : null}
           </Nav>
         </Collapse>
       </Container>

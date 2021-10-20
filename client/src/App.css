@@ -177,3 +177,7 @@ tr:nth-child(even) {
   font-size: 12px;
   display: inline-block;
 }
+
+.icon {
+  vertical-align: middle;
+}
