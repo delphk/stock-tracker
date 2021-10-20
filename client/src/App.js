@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,87 +19,87 @@ import { authenticationCheck } from "./helpers/api/api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-class App extends Component {
-  state = { isLoggedIn: undefined };
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(undefined);
 
-  toggleLogin = () => {
-    this.setState({ isLoggedIn: !this.state.isLoggedIn });
+  const toggleLogin = () => {
+    setIsLoggedIn(!isLoggedIn);
   };
 
   // Checks whether user is logged in
-  async componentDidMount() {
-    try {
-      const response = await authenticationCheck();
-      if (response.status === 200) {
-        this.setState({ isLoggedIn: true });
+  useEffect(() => {
+    async function checkLogin() {
+      try {
+        const response = await authenticationCheck();
+        if (response.status === 200) {
+          setIsLoggedIn(true);
+        }
+      } catch (err) {
+        setIsLoggedIn(false);
       }
-    } catch (err) {
-      this.setState({ isLoggedIn: false });
     }
-  }
+    checkLogin();
+  }, []);
 
-  render() {
-    const { isLoggedIn } = this.state;
-    return (
-      <Router>
-        <React.Fragment>
-          <AppNavBar isLoggedIn={isLoggedIn} />
-          <div role="main">
-            <Switch>
-              <Route
-                path="/login"
-                render={() => {
-                  return isLoggedIn ? (
-                    <Redirect to="/dashboard" />
-                  ) : (
-                    <LoginForm toggleLogin={this.toggleLogin} />
-                  );
-                }}
-              />
-              <AuthenticatedRoute
-                isLoggedIn={isLoggedIn}
-                exact
-                path="/"
-                component={Dashboard}
-              />
-              <Route
-                path="/register"
-                render={() => {
-                  return isLoggedIn ? (
-                    <Redirect to="/dashboard" />
-                  ) : (
-                    <RegistrationForm />
-                  );
-                }}
-              />
-              <AuthenticatedRoute
-                isLoggedIn={isLoggedIn}
-                path="/settings"
-                component={Settings}
-              />
-              <AuthenticatedRoute
-                isLoggedIn={isLoggedIn}
-                path="/dashboard"
-                component={Dashboard}
-              />
-              <AuthenticatedRoute
-                isLoggedIn={isLoggedIn}
-                path="/addstock"
-                component={AddStock}
-              />
-              <AuthenticatedRoute
-                toggleLogin={this.toggleLogin}
-                isLoggedIn={isLoggedIn}
-                path="/logout"
-                component={Logout}
-              />
-              <Route component={NotFound} />
-            </Switch>
-          </div>
-        </React.Fragment>
-      </Router>
-    );
-  }
-}
+  return (
+    <Router>
+      <React.Fragment>
+        <AppNavBar isLoggedIn={isLoggedIn} />
+        <div role="main">
+          <Switch>
+            <Route
+              path="/login"
+              render={() => {
+                return isLoggedIn ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <LoginForm toggleLogin={toggleLogin} />
+                );
+              }}
+            />
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
+              exact
+              path="/"
+              component={Dashboard}
+            />
+            <Route
+              path="/register"
+              render={() => {
+                return isLoggedIn ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <RegistrationForm />
+                );
+              }}
+            />
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
+              path="/settings"
+              component={Settings}
+            />
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
+              path="/dashboard"
+              component={Dashboard}
+            />
+            <AuthenticatedRoute
+              isLoggedIn={isLoggedIn}
+              path="/addstock"
+              component={AddStock}
+            />
+            <AuthenticatedRoute
+              toggleLogin={toggleLogin}
+              isLoggedIn={isLoggedIn}
+              path="/logout"
+              component={Logout}
+            />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
+      </React.Fragment>
+    </Router>
+  );
+};
 
 export default App;

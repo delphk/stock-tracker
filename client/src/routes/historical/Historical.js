@@ -37,7 +37,8 @@ const Historical = ({ data }) => {
                 />
               );
             })}
-            <Tooltip />;<Legend />
+            <Tooltip />
+            <Legend />
           </LineChart>
         </ResponsiveContainer>
       </div>
