@@ -70,7 +70,7 @@ const sendVerificationMail = async (req, res) => {
         req.headers.host +
         "/users/confirmation/" +
         token.token +
-        ".\n"
+        "\n"
     };
 
     sgMail.send(msg, err => {
